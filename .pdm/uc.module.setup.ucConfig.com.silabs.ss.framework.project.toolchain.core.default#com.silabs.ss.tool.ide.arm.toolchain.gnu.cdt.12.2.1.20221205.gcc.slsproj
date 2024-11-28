@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="uc.module.setup.ucConfig.com.silabs.ss.framework.project.toolchain.core.default#com.silabs.ss.tool.ide.arm.toolchain.gnu.cdt:12.2.1.20221205.gcc" propertyScope="project">
   <folder name="config">
-    <folder name="cc_config">
-      <file name="LEDBulb.cc_config" generated="true" linked="false"/>
-    </folder>
     <file name="sl_memory_config.h" generated="true" linked="false"/>
+    <file name="sl_board_control_config.h" generated="true" linked="false"/>
+    <file name="sl_iostream_usart_inst_config.h" generated="true" linked="false"/>
+    <file name="cc_association_config.h" generated="true" linked="false"/>
+    <file name="cc_firmware_update_config.h" generated="true" linked="false"/>
+    <file name="cc_supervision_config.h" generated="true" linked="false"/>
     <file name="zw_region_config.h" generated="true" linked="false"/>
     <file name="zw_config_rf.h" generated="true" linked="false"/>
-    <file name="zaf_config.h" generated="true" linked="false"/>
     <file name="zaf_tse_config.h" generated="true" linked="false"/>
-    <file name="cc_association_config.h" generated="true" linked="false"/>
-    <file name="cc_color_switch_config.h" generated="true" linked="false"/>
-    <file name="cc_firmware_update_config.h" generated="true" linked="false"/>
-    <file name="cc_multilevel_switch_support_config.h" generated="true" linked="false"/>
-    <file name="cc_supervision_config.h" generated="true" linked="false"/>
-    <file name="sl_simple_rgb_pwm_led_led_config.h" generated="true" linked="false"/>
-    <file name="sl_pwm_init_led1_config.h" generated="true" linked="false"/>
+    <file name="zaf_config.h" generated="true" linked="false"/>
     <file name="sl_power_manager_config.h" generated="true" linked="false"/>
     <file name="nvm3_default_config.h" generated="true" linked="false"/>
     <file name="sl_cli_config_inst0.h" generated="true" linked="false"/>
+    <file name="psa_crypto_config.h" generated="true" linked="false"/>
+    <file name="sl_device_init_dcdc_config.h" generated="true" linked="false"/>
     <file name="sl_memory_manager_config.h" generated="true" linked="false"/>
     <file name="FreeRTOSConfig.h" generated="true" linked="false"/>
     <file name="zaf_appname_config.h" generated="true" linked="false"/>
     <file name="zaf_event_distributor_soc_config.h" generated="true" linked="false"/>
+    <file name="sl_hfxo_manager_config.h" generated="true" linked="false"/>
+    <file name="dmadrv_config.h" generated="true" linked="false"/>
     <file name="zw_version_config.h" generated="true" linked="false"/>
     <file name="sl_interrupt_manager_s2_config.h" generated="true" linked="false"/>
     <file name="zaf_event_distributor_core_config.h" generated="true" linked="false"/>
     <file name="app_log_config.h" generated="true" linked="false"/>
     <file name="sl_cli_config.h" generated="true" linked="false"/>
     <file name="sl_memory_manager_region_config.h" generated="true" linked="false"/>
+    <file name="app_properties_config.h" generated="true" linked="false"/>
     <file name="sl_rail_util_power_manager_init_config.h" generated="true" linked="false"/>
+    <file name="sl_device_init_hfxo_config.h" generated="true" linked="false"/>
     <file name="sl_rail_util_pa_config.h" generated="true" linked="false"/>
     <file name="sl_core_config.h" generated="true" linked="false"/>
     <file name="radio_no_board.h" generated="true" linked="false"/>
@@ -41,14 +42,8 @@
     <file name="emlib_core_debug_config.h" generated="true" linked="false"/>
     <file name="sl_storage_config.h" generated="true" linked="false"/>
     <file name="sl_sleeptimer_config.h" generated="true" linked="false"/>
-    <file name="psa_crypto_config.h" generated="true" linked="false"/>
-    <file name="sl_device_init_dcdc_config.h" generated="true" linked="false"/>
-    <file name="sl_hfxo_manager_config.h" generated="true" linked="false"/>
-    <file name="app_properties_config.h" generated="true" linked="false"/>
-    <file name="sl_device_init_hfxo_config.h" generated="true" linked="false"/>
     <file name="sl_mbedtls_config.h" generated="true" linked="false"/>
     <file name="sl_mbedtls_device_config.h" generated="true" linked="false"/>
   </folder>
   <includePath uri="studio:/project/config"/>
-  <includePath uri="studio:/project/config/cc_config"/>
 </project>

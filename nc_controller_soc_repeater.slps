@@ -11,6 +11,6 @@
     <properties key="projectCommon.toolchainId" value="com.silabs.ss.tool.ide.arm.toolchain.gnu.cdt:12.2.1.20221205"/>
     <properties key="universalConfig.projectTypeIds" value="com.silabs.ss.framework.ide.project.core.cdtMbsProjectType"/>
     <properties key="projectCommon.importModeId" value="COPY"/>
-    <properties key="universalConfig.compSelProjInstanceId" value="1732797667890"/>
+    <properties key="universalConfig.compSelProjInstanceId" value="1732699111265"/>
   </descriptors>
-</model:MDescriptors>
+</model:MDescriptors>

@@ -12,9 +12,7 @@
 /*************************************************************************/
 
 // <<< Use Configuration Wizard in Context Menu >>>
-
 // <h>LED Configuration
-
 // <o LED1_ON_VALUE> LED1 ON value
 // <0=> Active low
 // <1=> Active high
@@ -53,6 +51,12 @@
 #define LED2_LABEL           "LED1"
 // <gpio> LED2_GPIO
 // $[GPIO_LED2_GPIO]
+#ifndef LED2_GPIO_PORT                          
+#define LED2_GPIO_PORT                           gpioPortC
+#endif
+#ifndef LED2_GPIO_PIN                           
+#define LED2_GPIO_PIN                            6
+#endif
 // [GPIO_LED2_GPIO]$
 
 #define LED3_LABEL           "LED2"

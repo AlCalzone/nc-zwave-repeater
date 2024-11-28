@@ -29,37 +29,33 @@ toolchain_settings: []
 component:
 - {id: EFR32ZG23A020F512GM40}
 - {id: ZW_MIGRATION_TO_7_19}
+- {id: board_control}
 - {id: device_init}
 - {id: emlib_letimer}
 - {id: emlib_msc}
 - {id: emlib_timer}
 - {id: gpiointerrupt}
+- instance: [inst]
+  id: iostream_usart
+- {id: led}
 - {id: mpu}
-- instance: [led1]
-  id: pwm
-- instance: [led]
-  id: simple_rgb_pwm_led
 - {id: sl_system}
 - {id: zaf_soc}
-- {id: zw_appshw_ledbulb}
+- {id: zw_appshw}
 - {id: zw_cc_association}
 - {id: zw_cc_basic}
-- {id: zw_cc_color_switch}
-- {id: zw_cc_color_switch_nvm}
 - {id: zw_cc_common}
 - {id: zw_cc_deviceresetlocally}
 - {id: zw_cc_firmwareupdate}
-- {id: zw_cc_indicator}
 - {id: zw_cc_manufacturerspecific}
 - {id: zw_cc_multi_channel_control}
-- {id: zw_cc_multilevel_switch_support}
-- {id: zw_cc_multilevel_switch_support_nvm}
 - {id: zw_cc_powerlevel}
 - {id: zw_cc_supervision}
 - {id: zw_cc_version}
 - {id: zw_cc_zwaveplusinfo}
 - {id: zw_cli_common}
 - {id: zw_core}
+- {id: zw_debug_print}
 - {id: zw_ota}
 - {id: zw_role_type_always_on}
 - {id: zw_true_status}
@@ -69,8 +65,6 @@ other_file:
 define:
 - {name: APP_PROPERTIES_CONFIG_FILE, value: <application_properties_config.h>}
 - {name: FILE_ID_APPLICATIONDATA, value: '0x00000'}
-config_file:
-- {path: config/cc_config/LEDBulb.cc_config, directory: cc_config}
 configuration:
 - {name: ZAF_CONFIG_REQUEST_KEY_S0, value: '1'}
 - {name: ZAF_CONFIG_REQUEST_KEY_S2_UNAUTHENTICATED, value: '1'}
@@ -114,7 +108,7 @@ configuration:
 - {name: SL_PSA_ITS_SUPPORT_V1_DRIVER, value: '1'}
 - {name: SL_PSA_ITS_SUPPORT_V2_DRIVER, value: '1'}
 - {name: SL_PSA_ITS_SUPPORT_V3_DRIVER, value: '1'}
-- {name: ZAF_APP_NAME, value: '"led_bulb"'}
+- {name: ZAF_APP_NAME, value: '"nc_repeater"'}
 - {name: SL_RAIL_UTIL_RAIL_POWER_MANAGER_INIT, value: '0'}
 ui_hints:
   highlight:

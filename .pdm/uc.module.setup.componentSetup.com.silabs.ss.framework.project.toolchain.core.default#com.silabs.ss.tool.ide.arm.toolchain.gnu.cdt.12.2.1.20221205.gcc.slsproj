@@ -203,10 +203,15 @@
             <file name="sl_iostream.c" linked="false" uri="studio:/sdk/platform/service/iostream/src/sl_iostream.c"/>
             <file name="sl_iostream_retarget_stdio.c" linked="false" uri="studio:/sdk/platform/service/iostream/src/sl_iostream_retarget_stdio.c"/>
             <file name="sl_iostream_stdlib_config.c" linked="false" uri="studio:/sdk/platform/service/iostream/src/sl_iostream_stdlib_config.c"/>
+            <file name="sl_iostream_uart.c" linked="false" uri="studio:/sdk/platform/service/iostream/src/sl_iostream_uart.c"/>
+            <file name="sl_iostream_usart.c" linked="false" uri="studio:/sdk/platform/service/iostream/src/sl_iostream_usart.c"/>
           </folder>
           <folder name="inc">
             <file name="sl_iostream.h" linked="false" uri="studio:/sdk/platform/service/iostream/inc/sl_iostream.h"/>
             <file name="sl_iostream_stdlib_config.h" linked="false" uri="studio:/sdk/platform/service/iostream/inc/sl_iostream_stdlib_config.h"/>
+            <file name="sl_iostream_uart.h" linked="false" uri="studio:/sdk/platform/service/iostream/inc/sl_iostream_uart.h"/>
+            <file name="sli_iostream_uart.h" linked="false" uri="studio:/sdk/platform/service/iostream/inc/sli_iostream_uart.h"/>
+            <file name="sl_iostream_usart.h" linked="false" uri="studio:/sdk/platform/service/iostream/inc/sl_iostream_usart.h"/>
           </folder>
         </folder>
         <folder name="memory_manager">
@@ -300,6 +305,17 @@
         </folder>
       </folder>
       <folder name="emdrv">
+        <folder name="dmadrv">
+          <folder name="src">
+            <file name="dmadrv.c" linked="false" uri="studio:/sdk/platform/emdrv/dmadrv/src/dmadrv.c"/>
+          </folder>
+          <folder name="inc">
+            <folder name="s2_signals">
+              <file name="dmadrv_signals.h" linked="false" uri="studio:/sdk/platform/emdrv/dmadrv/inc/s2_signals/dmadrv_signals.h"/>
+            </folder>
+            <file name="dmadrv.h" linked="false" uri="studio:/sdk/platform/emdrv/dmadrv/inc/dmadrv.h"/>
+          </folder>
+        </folder>
         <folder name="common">
           <folder name="inc">
             <file name="ecode.h" linked="false" uri="studio:/sdk/platform/emdrv/common/inc/ecode.h"/>
@@ -417,21 +433,9 @@
         <folder name="leddrv">
           <folder name="src">
             <file name="sl_led.c" linked="false" uri="studio:/sdk/platform/driver/leddrv/src/sl_led.c"/>
-            <file name="sl_pwm_led.c" linked="false" uri="studio:/sdk/platform/driver/leddrv/src/sl_pwm_led.c"/>
-            <file name="sl_simple_rgb_pwm_led.c" linked="false" uri="studio:/sdk/platform/driver/leddrv/src/sl_simple_rgb_pwm_led.c"/>
           </folder>
           <folder name="inc">
             <file name="sl_led.h" linked="false" uri="studio:/sdk/platform/driver/leddrv/inc/sl_led.h"/>
-            <file name="sl_pwm_led.h" linked="false" uri="studio:/sdk/platform/driver/leddrv/inc/sl_pwm_led.h"/>
-            <file name="sl_simple_rgb_pwm_led.h" linked="false" uri="studio:/sdk/platform/driver/leddrv/inc/sl_simple_rgb_pwm_led.h"/>
-          </folder>
-        </folder>
-        <folder name="pwm">
-          <folder name="src">
-            <file name="sl_pwm.c" linked="false" uri="studio:/sdk/platform/driver/pwm/src/sl_pwm.c"/>
-          </folder>
-          <folder name="inc">
-            <file name="sl_pwm.h" linked="false" uri="studio:/sdk/platform/driver/pwm/inc/sl_pwm.h"/>
           </folder>
         </folder>
       </folder>
@@ -620,6 +624,18 @@
             <file name="app_log.h" linked="false" uri="studio:/sdk/app/common/util/app_log/app_log.h"/>
             <file name="sl_app_log.h" linked="false" uri="studio:/sdk/app/common/util/app_log/sl_app_log.h"/>
           </folder>
+        </folder>
+      </folder>
+    </folder>
+    <folder name="hardware">
+      <folder name="board">
+        <folder name="src">
+          <file name="sl_board_init.c" linked="false" uri="studio:/sdk/hardware/board/src/sl_board_init.c"/>
+          <file name="sl_board_control_stub.c" linked="false" uri="studio:/sdk/hardware/board/src/sl_board_control_stub.c"/>
+        </folder>
+        <folder name="inc">
+          <file name="sl_board_control.h" linked="false" uri="studio:/sdk/hardware/board/inc/sl_board_control.h"/>
+          <file name="sl_board_init.h" linked="false" uri="studio:/sdk/hardware/board/inc/sl_board_init.h"/>
         </folder>
       </folder>
     </folder>
@@ -942,6 +958,8 @@
             <file name="ZAF_nvm.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/ApplicationUtilities/ZAF_nvm.h"/>
             <file name="ZAF_nvm_app.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/ApplicationUtilities/ZAF_nvm_app.h"/>
             <file name="ZAF_retention_register.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/ApplicationUtilities/ZAF_retention_register.h"/>
+            <file name="ZAF_PrintAppInfo.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/ApplicationUtilities/ZAF_PrintAppInfo.c"/>
+            <file name="ZAF_PrintAppInfo.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/ApplicationUtilities/ZAF_PrintAppInfo.h"/>
             <file name="ZAF_version.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/ApplicationUtilities/ZAF_version.c"/>
             <file name="ZAF_version.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/ApplicationUtilities/ZAF_version.h"/>
           </folder>
@@ -965,8 +983,6 @@
             <folder name="Indicator">
               <folder name="src">
                 <file name="CC_Indicator_weak.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/Indicator/src/CC_Indicator_weak.c"/>
-                <file name="CC_Indicator.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/Indicator/src/CC_Indicator.c"/>
-                <file name="CC_IndicatorPrivate.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/Indicator/src/CC_IndicatorPrivate.h"/>
               </folder>
               <folder name="inc">
                 <file name="CC_Indicator.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/Indicator/inc/CC_Indicator.h"/>
@@ -1001,18 +1017,6 @@
                 <file name="CC_Basic.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/Basic/inc/CC_Basic.h"/>
               </folder>
             </folder>
-            <folder name="ColorSwitch">
-              <folder name="src">
-                <file name="CC_ColorSwitch.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/ColorSwitch/src/CC_ColorSwitch.c"/>
-                <file name="cc_color_switch_io_weak.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/ColorSwitch/src/cc_color_switch_io_weak.c"/>
-                <file name="cc_color_switch_config_api.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/ColorSwitch/src/cc_color_switch_config_api.h"/>
-                <file name="cc_color_switch_io.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/ColorSwitch/src/cc_color_switch_io.h"/>
-                <file name="cc_color_switch_nvm.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/ColorSwitch/src/cc_color_switch_nvm.c"/>
-              </folder>
-              <folder name="inc">
-                <file name="CC_ColorSwitch.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/ColorSwitch/inc/CC_ColorSwitch.h"/>
-              </folder>
-            </folder>
             <folder name="Common">
               <file name="CC_Common.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/Common/CC_Common.c"/>
               <file name="CC_Common.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/Common/CC_Common.h"/>
@@ -1036,17 +1040,6 @@
               </folder>
               <folder name="inc">
                 <file name="multichannel.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/MultiChan/inc/multichannel.h"/>
-              </folder>
-            </folder>
-            <folder name="MultilevelSwitch">
-              <folder name="src">
-                <file name="CC_MultilevelSwitch_Support.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/MultilevelSwitch/src/CC_MultilevelSwitch_Support.c"/>
-                <file name="cc_multilevel_switch_support_io_weak.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/MultilevelSwitch/src/cc_multilevel_switch_support_io_weak.c"/>
-                <file name="cc_multilevel_switch_support_io.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/MultilevelSwitch/src/cc_multilevel_switch_support_io.h"/>
-                <file name="cc_multilevel_switch_support_nvm.c" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/MultilevelSwitch/src/cc_multilevel_switch_support_nvm.c"/>
-              </folder>
-              <folder name="inc">
-                <file name="CC_MultilevelSwitch_Support.h" linked="false" uri="studio:/sdk/protocol/z-wave/ZAF/CommandClasses/MultilevelSwitch/inc/CC_MultilevelSwitch_Support.h"/>
               </folder>
             </folder>
             <folder name="PowerLevel">
@@ -1095,9 +1088,6 @@
                   <file name="board.c" linked="false" uri="studio:/sdk/protocol/z-wave/platform/SiliconLabs/AppsHw/src/common/board.c"/>
                   <file name="board_indicator.c" linked="false" uri="studio:/sdk/protocol/z-wave/platform/SiliconLabs/AppsHw/src/common/board_indicator.c"/>
                   <file name="board_init.c" linked="false" uri="studio:/sdk/protocol/z-wave/platform/SiliconLabs/AppsHw/src/common/board_init.c"/>
-                </folder>
-                <folder name="LEDBulb">
-                  <file name="LEDBulb_hw.c" linked="false" uri="studio:/sdk/protocol/z-wave/platform/SiliconLabs/AppsHw/src/LEDBulb/LEDBulb_hw.c"/>
                 </folder>
               </folder>
               <folder name="inc">
@@ -1185,6 +1175,7 @@
           <folder name="DebugPrint">
             <file name="DebugPrint.h" linked="false" uri="studio:/sdk/protocol/z-wave/Components/DebugPrint/DebugPrint.h"/>
             <file name="DebugPrintConfig.h" linked="false" uri="studio:/sdk/protocol/z-wave/Components/DebugPrint/DebugPrintConfig.h"/>
+            <file name="DebugPrint.c" linked="false" uri="studio:/sdk/protocol/z-wave/Components/DebugPrint/DebugPrint.c"/>
           </folder>
           <folder name="CRC">
             <file name="CRC.h" linked="false" uri="studio:/sdk/protocol/z-wave/Components/CRC/CRC.h"/>
@@ -1202,15 +1193,16 @@
       </folder>
     </folder>
   </folder>
-  <file name="app.c" linked="false" uri="studio:/sdk/protocol/z-wave/Apps/zwave_soc_led_bulb/app.c"/>
-  <file name="main.c" linked="false" uri="studio:/sdk/protocol/z-wave/Apps/zwave_soc_led_bulb/main.c"/>
-  <file name="events.h" linked="false" uri="studio:/sdk/protocol/z-wave/Apps/zwave_soc_led_bulb/events.h"/>
-  <file name="postbuild.sh" linked="false" uri="studio:/sdk/protocol/z-wave/DevTools/postbuild.sh"/>
-  <file name="README.md" linked="false" uri="studio:/sdk/protocol/z-wave/Apps/zwave_soc_led_bulb/README.md"/>
+  <file name="app.c" linked="false" uri="studio:/project/app.c"/>
+  <file name="main.c" linked="false" uri="studio:/project/main.c"/>
+  <file name="events.h" linked="false" uri="studio:/project/events.h"/>
+  <file name="postbuild.sh" linked="false" uri="studio:/project/postbuild.sh"/>
+  <file name="README.md" linked="false" uri="studio:/project/README.md"/>
   <includePath uri="studio:/project/"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/Device/SiliconLabs/EFR32ZG23/Include"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/app/common/util/app_log"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/common/inc"/>
+  <includePath uri="studio:/project/simplicity_sdk_2024.6.2/hardware/board/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/bootloader"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/bootloader/api"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/service/cli/inc"/>
@@ -1221,6 +1213,8 @@
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/CMSIS/RTOS2/Include"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/service/device_manager/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/service/device_init/inc"/>
+  <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/emdrv/dmadrv/inc"/>
+  <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/emdrv/dmadrv/inc/s2_signals"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/emdrv/common/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/emlib/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/common/toolchain/inc"/>
@@ -1247,7 +1241,6 @@
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/util/third_party/printf"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/util/third_party/printf/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/security/sl_component/sl_psa_driver/inc"/>
-  <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/driver/pwm/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/radio/rail_lib/common"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/radio/rail_lib/protocol/ble"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/platform/radio/rail_lib/protocol/ieee802154"/>
@@ -1277,13 +1270,9 @@
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/Association/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/Association/src"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/Basic/inc"/>
-  <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/ColorSwitch/inc"/>
-  <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/ColorSwitch/src"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/Common"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/FirmwareUpdate/inc"/>
-  <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/Indicator/src"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/MultiChan/inc"/>
-  <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/MultilevelSwitch/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/Supervision/inc"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/Supervision/src"/>
   <includePath uri="studio:/project/simplicity_sdk_2024.6.2/protocol/z-wave/ZAF/CommandClasses/ZWavePlusInfo/inc"/>
@@ -1334,8 +1323,6 @@
   <macroDefinition name="ZW_SECURITY_PROTOCOL"/>
   <macroDefinition name="ZW_SLAVE"/>
   <macroDefinition name="ZW_SLAVE_ROUTING"/>
-  <macroDefinition name="NDEBUG"/>
-  <macroDefinition name="NO_DEBUGPRINT"/>
   <macroDefinition name="ZAF_CONFIG_APP_ROLE_TYPE" value="ZWAVEPLUS_INFO_REPORT_ROLE_TYPE_END_NODE_ALWAYS_ON"/>
   <macroDefinition name="ZAF_CONFIG_DEVICE_OPTION_MASK" value="APPLICATION_NODEINFO_LISTENING"/>
   <macroDefinition name="RADIO_NO_BOARD"/>
@@ -1370,7 +1357,7 @@
   <toolOption toolId="toolOption.uc.compiler" optionId="toolOption.uc.compiler.omit_frame_pointer" value="true"/>
   <toolOption toolId="toolOption.uc.compiler" optionId="toolOption.uc.compiler.no_exceptions" value="true"/>
   <toolOption toolId="toolOption.uc.compiler" optionId="toolOption.uc.compiler.no_rtti" value="true"/>
-  <toolOption toolId="toolOption.uc.compiler" optionId="toolOption.uc.compiler.optimization" value="size"/>
+  <toolOption toolId="toolOption.uc.compiler" optionId="toolOption.uc.compiler.optimization" value="debug"/>
   <toolOption toolId="toolOption.uc.linker" optionId="toolOption.uc.linker.generateMapFile" value="true"/>
   <toolOption toolId="toolOption.uc.compiler" optionId="toolOption.uc.compiler.c_standard" value="c18"/>
   <toolOption toolId="toolOption.uc.compiler" optionId="toolOption.uc.compiler.cxx_standard" value="c++17"/>
@@ -1401,8 +1388,8 @@
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.misc.dialect" value="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.misc.dialect.cpp17"/>
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.no_rtti" value="true"/>
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.no_exceptions" value="true"/>
-  <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.optimization.level" value="gnu.c.optimization.level.size"/>
-  <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.optimization.level" value="gnu.cpp.compiler.optimization.level.size"/>
+  <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.optimization.level" value="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.optimization.level.debug"/>
+  <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.optimization.level" value="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.optimization.level.debug"/>
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.optimization.datasect" value="true"/>
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.cpp.compiler.optimization.datasect" value="true"/>
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base" optionId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.optimization.functionsects" value="true"/>
@@ -1432,11 +1419,9 @@
     <toolListOption value="-s"/>
     <toolListOption value="-fmerge-all-constants"/>
     <toolListOption value="-Wall"/>
-    <toolListOption value="-Werror"/>
     <toolListOption value="-Werror=vla"/>
     <toolListOption value="-Werror=unused-parameter"/>
     <toolListOption value="-Wextra"/>
-    <toolListOption value="-Wno-implicit-function-declaration"/>
     <toolListOption value="-g"/>
   </toolOption>
   <toolOption toolId="com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base" optionId="com.silabs.gnu.c.compiler.option.misc.otherlist">
@@ -1447,11 +1432,9 @@
     <toolListOption value="-s"/>
     <toolListOption value="-fmerge-all-constants"/>
     <toolListOption value="-Wall"/>
-    <toolListOption value="-Werror"/>
     <toolListOption value="-Werror=vla"/>
     <toolListOption value="-Werror=unused-parameter"/>
     <toolListOption value="-Wextra"/>
-    <toolListOption value="-Wno-implicit-function-declaration"/>
     <toolListOption value="-c"/>
     <toolListOption value="-fmessage-length=0"/>
   </toolOption>
@@ -1461,11 +1444,9 @@
     <toolListOption value="-s"/>
     <toolListOption value="-fmerge-all-constants"/>
     <toolListOption value="-Wall"/>
-    <toolListOption value="-Werror"/>
     <toolListOption value="-Werror=vla"/>
     <toolListOption value="-Werror=unused-parameter"/>
     <toolListOption value="-Wextra"/>
-    <toolListOption value="-Wno-implicit-function-declaration"/>
     <toolListOption value="-c"/>
     <toolListOption value="-fmessage-length=0"/>
   </toolOption>
@@ -1500,11 +1481,9 @@
     <toolListOption value="-s"/>
     <toolListOption value="-fmerge-all-constants"/>
     <toolListOption value="-Wall"/>
-    <toolListOption value="-Werror"/>
     <toolListOption value="-Werror=vla"/>
     <toolListOption value="-Werror=unused-parameter"/>
     <toolListOption value="-Wextra"/>
-    <toolListOption value="-Wno-implicit-function-declaration"/>
   </toolOption>
   <toolOption toolId="makefile.arm.gcc.assembler" optionId="misc">
     <toolListOption value="-x assembler-with-cpp"/>

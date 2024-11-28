@@ -21,7 +21,7 @@
 
 // <s.29 ZAF_APP_NAME> Application Name
 // <d> "zwave_application"
-#define ZAF_APP_NAME  "led_bulb"
+#define ZAF_APP_NAME  "nc_repeater"
 
 // </h>
 

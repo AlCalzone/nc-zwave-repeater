@@ -9,10 +9,10 @@
 #include <stdint.h>
 #include "MfgTokens.h"
 #include "DebugPrintConfig.h"
-//#define DEBUGPRINT
+#define DEBUGPRINT
 #include "DebugPrint.h"
 #include "ZW_system_startup_api.h"
-#include "CC_MultilevelSwitch_Support.h"
+// #include "CC_MultilevelSwitch_Support.h"
 #include "ZAF_Common_helper.h"
 #include "ZAF_Common_interface.h"
 #include "ZAF_network_learn.h"
@@ -28,6 +28,7 @@
 #ifdef DEBUGPRINT
 #include "ZAF_PrintAppInfo.h"
 #endif
+#include "app_log.h"
 
 #ifdef SL_CATALOG_ZW_CLI_COMMON_PRESENT
 #include "zw_cli_common.h"
@@ -92,7 +93,8 @@ static void ApplicationTask(SApplicationHandles* pAppHandles)
   ZAF_PrintAppInfo();
 #endif
 
-  app_hw_init();
+  // This is a repeater - it does not have hardware to init
+  // app_hw_init();
 
   /* Enter SmartStart*/
   /* Protocol will commence SmartStart only if the node is NOT already included in the network */
@@ -117,6 +119,15 @@ zaf_event_distributor_app_event_manager(const uint8_t event)
   DPRINTF("zaf_event_distributor_app_event_manager Ev: %d\r\n", event);
 
   switch (event) {
+    case EVENT_APP_WIPE:
+
+      ZAF_nvm_erase();
+      //fallthrough
+    case EVENT_APP_BOOTLOADER:
+
+      bootloader_rebootAndInstall();
+      break;
+
     default:
       // Unknow event - do nothing.
       break;
