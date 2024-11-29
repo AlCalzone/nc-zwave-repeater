@@ -29,6 +29,7 @@
 #include "ZAF_PrintAppInfo.h"
 #endif
 #include "app_log.h"
+#include "btl_interface.h"
 
 #ifdef SL_CATALOG_ZW_CLI_COMMON_PRESENT
 #include "zw_cli_common.h"
@@ -119,10 +120,6 @@ zaf_event_distributor_app_event_manager(const uint8_t event)
   DPRINTF("zaf_event_distributor_app_event_manager Ev: %d\r\n", event);
 
   switch (event) {
-    case EVENT_APP_WIPE:
-
-      ZAF_nvm_erase();
-      //fallthrough
     case EVENT_APP_BOOTLOADER:
 
       bootloader_rebootAndInstall();
