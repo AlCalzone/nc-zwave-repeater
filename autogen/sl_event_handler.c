@@ -18,10 +18,9 @@
 #include "sl_gpio.h"
 #include "gpiointerrupt.h"
 #include "sl_iostream_stdlib_config.h"
+#include "sl_iostream_init_usart_instances.h"
 #include "sl_mbedtls.h"
-#include "sl_pwm_instances.h"
 #include "sl_simple_button_instances.h"
-#include "sl_simple_led_instances.h"
 #include "app_button_press.h"
 #include "ZW_basis_api.h"
 #include "sl_cli_instances.h"
@@ -59,9 +58,7 @@ void sl_driver_init(void)
 {
   sl_gpio_init();
   GPIOINT_Init();
-  sl_pwm_init_instances();
   sl_simple_button_init_instances();
-  sl_simple_led_init_instances();
 }
 
 void sl_service_init(void)
@@ -93,6 +90,7 @@ void sl_internal_app_init(void)
 
 void sl_iostream_init_instances(void)
 {
+  sl_iostream_usart_init_instances();
   sl_iostream_set_console_instance();
 }
 

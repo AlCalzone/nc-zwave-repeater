@@ -12,7 +12,6 @@
 //#define DEBUGPRINT
 #include "DebugPrint.h"
 #include "ZW_system_startup_api.h"
-#include "CC_MultilevelSwitch_Support.h"
 #include "ZAF_Common_helper.h"
 #include "ZAF_Common_interface.h"
 #include "ZAF_network_learn.h"

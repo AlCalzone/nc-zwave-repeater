@@ -43,7 +43,7 @@
 // <i> Default: Button release detection
 // <i> By changing this configuration to detect press and release it is necessary to
 // increase the command queue size of this component, since more events need to be handled.
-#define APP_BUTTON_PRESS_DETECTION      APP_BUTTON_PRESS_DETECT_RELEASE
+#define APP_BUTTON_PRESS_DETECTION      APP_BUTTON_PRESS_DETECT_PRESS_AND_RELEASE
 
 // </h>
 

@@ -1,9 +1,9 @@
 /***************************************************************************//**
  * @file
- * @brief PWM Driver
+ * @brief Simple Button Driver User Config
  *******************************************************************************
  * # License
- * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2024 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * SPDX-License-Identifier: Zlib
@@ -28,47 +28,34 @@
  *
  ******************************************************************************/
 
-#ifndef SL_PWM_INIT_LED1_CONFIG_H
-#define SL_PWM_INIT_LED1_CONFIG_H
+#ifndef SL_SIMPLE_BUTTON_INSTANCE0_CONFIG_H
+#define SL_SIMPLE_BUTTON_INSTANCE0_CONFIG_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "sl_gpio.h"
+#include "sl_simple_button.h"
 
 // <<< Use Configuration Wizard in Context Menu >>>
 
-// <h>PWM configuration
-
-// <o SL_PWM_LED1_FREQUENCY> PWM frequency [Hz]
-// <i> Default: 10000
-#define SL_PWM_LED1_FREQUENCY       10000
-
-// <o SL_PWM_LED1_POLARITY> Polarity
-// <PWM_ACTIVE_HIGH=> Active high
-// <PWM_ACTIVE_LOW=> Active low
-// <i> Default: PWM_ACTIVE_HIGH
-#define SL_PWM_LED1_POLARITY        PWM_ACTIVE_HIGH
-// </h> end pwm configuration
-
+// <o SL_SIMPLE_BUTTON_INSTANCE0_MODE>
+// <SL_SIMPLE_BUTTON_MODE_INTERRUPT=> Interrupt
+// <SL_SIMPLE_BUTTON_MODE_POLL_AND_DEBOUNCE=> Poll and Debounce
+// <SL_SIMPLE_BUTTON_MODE_POLL=> Poll
+// <i> Default: SL_SIMPLE_BUTTON_MODE_INTERRUPT
+#define SL_SIMPLE_BUTTON_INSTANCE0_MODE       SL_SIMPLE_BUTTON_MODE_INTERRUPT
 // <<< end of configuration section >>>
 
 // <<< sl:start pin_tool >>>
 
-// <timer channel=OUTPUT> SL_PWM_LED1
-// $[TIMER_SL_PWM_LED1]
-#warning "PWM Driver TIMER peripheral not configured"
-// #define SL_PWM_LED1_PERIPHERAL              TIMER0
-// #define SL_PWM_LED1_PERIPHERAL_NO           0
-
-// #define SL_PWM_LED1_OUTPUT_CHANNEL          0
-// #define SL_PWM_LED1_OUTPUT_PORT             SL_GPIO_PORT_A
-// #define SL_PWM_LED1_OUTPUT_PIN              0
-// [TIMER_SL_PWM_LED1]$
+// <gpio> SL_SIMPLE_BUTTON_INSTANCE0
+// $[GPIO_SL_SIMPLE_BUTTON_INSTANCE0]
+#ifndef SL_SIMPLE_BUTTON_INSTANCE0_PORT         
+#define SL_SIMPLE_BUTTON_INSTANCE0_PORT          SL_GPIO_PORT_C
+#endif
+#ifndef SL_SIMPLE_BUTTON_INSTANCE0_PIN          
+#define SL_SIMPLE_BUTTON_INSTANCE0_PIN           5
+#endif
+// [GPIO_SL_SIMPLE_BUTTON_INSTANCE0]$
 
 // <<< sl:end pin_tool >>>
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif // SL_PWM_INIT_LED1_CONFIG_H
+#endif // SL_SIMPLE_BUTTON_INSTANCE0_CONFIG_H

@@ -74,6 +74,22 @@
 // [TIMER4]$
 
 // $[USART0]
+// USART0 RX on PA07
+#ifndef USART0_RX_PORT                          
+#define USART0_RX_PORT                           SL_GPIO_PORT_A
+#endif
+#ifndef USART0_RX_PIN                           
+#define USART0_RX_PIN                            7
+#endif
+
+// USART0 TX on PA08
+#ifndef USART0_TX_PORT                          
+#define USART0_TX_PORT                           SL_GPIO_PORT_A
+#endif
+#ifndef USART0_TX_PIN                           
+#define USART0_TX_PIN                            8
+#endif
+
 // [USART0]$
 
 // $[I2C1]
@@ -130,6 +146,13 @@
 #endif
 #ifndef _PIN                                    
 #define _PIN                                     0
+#endif
+
+#ifndef BTN0_PORT                               
+#define BTN0_PORT                                SL_GPIO_PORT_C
+#endif
+#ifndef BTN0_PIN                                
+#define BTN0_PIN                                 5
 #endif
 
 // [CUSTOM_PIN_NAME]$
