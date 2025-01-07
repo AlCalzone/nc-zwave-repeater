@@ -1,0 +1,8 @@
+GNU*/
+artifact/
+.pdm/
+.cproject
+.projectlinkstore
+.settings/
+.slc_state/
+sbom/
