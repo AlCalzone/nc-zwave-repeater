@@ -122,35 +122,15 @@ extern "C" {
  ******************************************************************************/
 
 // Provide function declarations
-void button_press_from_cli(sl_cli_command_arg_t *arguments);
-void button_hold_from_cli(sl_cli_command_arg_t *arguments);
-void button_release_from_cli(sl_cli_command_arg_t *arguments);
 void cli_set_learn_mode(sl_cli_command_arg_t *arguments);
 void cli_factory_reset(sl_cli_command_arg_t *arguments);
 void cli_get_dsk(sl_cli_command_arg_t *arguments);
 void cli_get_region(sl_cli_command_arg_t *arguments);
+void cli_bootloader(sl_cli_command_arg_t *arguments);
 
 // Command structs. Names are in the format : cli_cmd_{command group name}_{command name}
 // In order to support hyphen in command and group name, every occurence of it while
 // building struct names will be replaced by "_hyphen_"
-static const sl_cli_command_info_t cli_cmd_button_press = \
-  SL_CLI_COMMAND(button_press_from_cli,
-                 "Emulating a button press",
-                  "Button: 0: BTN0, 1+: BTN1" SL_CLI_UNIT_SEPARATOR "Press and hold duration: 0 - short, 1- medium, 2 - long, 3+ - verylong" SL_CLI_UNIT_SEPARATOR,
-                 {SL_CLI_ARG_UINT8, SL_CLI_ARG_UINT8, SL_CLI_ARG_END, });
-
-static const sl_cli_command_info_t cli_cmd_button_hold = \
-  SL_CLI_COMMAND(button_hold_from_cli,
-                 "Emulates pressing and holding a button.",
-                  "Button: 0: BTN0, 1+: BTN1" SL_CLI_UNIT_SEPARATOR,
-                 {SL_CLI_ARG_UINT8, SL_CLI_ARG_END, });
-
-static const sl_cli_command_info_t cli_cmd_button_release = \
-  SL_CLI_COMMAND(button_release_from_cli,
-                 "Emulates releasing a button.",
-                  "Button: 0: BTN0, 1+: BTN1" SL_CLI_UNIT_SEPARATOR,
-                 {SL_CLI_ARG_UINT8, SL_CLI_ARG_END, });
-
 static const sl_cli_command_info_t cli_cmd__set_learn_mode = \
   SL_CLI_COMMAND(cli_set_learn_mode,
                  "Include / exclude the device into / from a z-wave network",
@@ -175,21 +155,15 @@ static const sl_cli_command_info_t cli_cmd__get_region = \
                   "",
                  {SL_CLI_ARG_END, });
 
+static const sl_cli_command_info_t cli_cmd__bootloader = \
+  SL_CLI_COMMAND(cli_bootloader,
+                 "Restart into bootloader",
+                  "",
+                 {SL_CLI_ARG_END, });
 
 // Create group command tables and structs if cli_groups given
 // in template. Group name is suffixed with _group_table for tables
 // and group commands are cli_cmd_grp_( group name )
-static const sl_cli_command_entry_t button_group_table[] = {
-  { "press", &cli_cmd_button_press, false },
-  { "p", &cli_cmd_button_press, true },
-  { "hold", &cli_cmd_button_hold, false },
-  { "h", &cli_cmd_button_hold, true },
-  { "release", &cli_cmd_button_release, false },
-  { "r", &cli_cmd_button_release, true },
-  { NULL, NULL, false },
-};
-static const sl_cli_command_info_t cli_cmd_grp_button = \
-  SL_CLI_COMMAND_GROUP(button_group_table, "Emulating button events (various type of button presses).");
 
 // Create root command table
 const sl_cli_command_entry_t sl_cli_default_command_table[] = {
@@ -197,9 +171,7 @@ const sl_cli_command_entry_t sl_cli_default_command_table[] = {
   { "factory_reset", &cli_cmd__factory_reset, false },
   { "get_dsk", &cli_cmd__get_dsk, false },
   { "get_region", &cli_cmd__get_region, false },
-  { "button", &cli_cmd_grp_button, false },
-  { "btn", &cli_cmd_grp_button, true },
-  { "b", &cli_cmd_grp_button, true },
+  { "bootloader", &cli_cmd__bootloader, false },
   { NULL, NULL, false },
 };
 
