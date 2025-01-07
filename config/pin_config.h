@@ -96,6 +96,30 @@
 // [I2C1]$
 
 // $[EUSART1]
+// EUSART1 RX on PC00
+#ifndef EUSART1_RX_PORT                         
+#define EUSART1_RX_PORT                          SL_GPIO_PORT_C
+#endif
+#ifndef EUSART1_RX_PIN                          
+#define EUSART1_RX_PIN                           0
+#endif
+
+// EUSART1 SCLK on PC01
+#ifndef EUSART1_SCLK_PORT                       
+#define EUSART1_SCLK_PORT                        SL_GPIO_PORT_C
+#endif
+#ifndef EUSART1_SCLK_PIN                        
+#define EUSART1_SCLK_PIN                         1
+#endif
+
+// EUSART1 TX on PC02
+#ifndef EUSART1_TX_PORT                         
+#define EUSART1_TX_PORT                          SL_GPIO_PORT_C
+#endif
+#ifndef EUSART1_TX_PIN                          
+#define EUSART1_TX_PIN                           2
+#endif
+
 // [EUSART1]$
 
 // $[EUSART2]
@@ -146,6 +170,13 @@
 #endif
 #ifndef _PIN                                    
 #define _PIN                                     0
+#endif
+
+#ifndef WS2812_EN_PORT                          
+#define WS2812_EN_PORT                           SL_GPIO_PORT_C
+#endif
+#ifndef WS2812_EN_PIN                           
+#define WS2812_EN_PIN                            3
 #endif
 
 #ifndef BTN0_PORT                               

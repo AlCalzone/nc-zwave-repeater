@@ -27,6 +27,8 @@
 #ifdef DEBUGPRINT
 #include "ZAF_PrintAppInfo.h"
 #endif
+#include "ZW_UserTask.h"
+#include "app_led_task.h"
 
 #ifdef SL_CATALOG_ZW_CLI_COMMON_PRESENT
 #include "zw_cli_common.h"
@@ -37,6 +39,15 @@
 #endif
 
 static void ApplicationTask(SApplicationHandles* pAppHandles);
+
+#define LED_TASK_STACK_SIZE           200  // [bytes]
+static TaskHandle_t m_xTaskHandleLED   = NULL;
+// Task and stack buffer allocation for the default/main application task!
+static StaticTask_t LEDTaskBuffer;
+static uint8_t LEDStackBuffer[LED_TASK_STACK_SIZE];
+
+rgb_t LED_OFF[NUMBER_OF_LEDS] = {0};
+rgb_t LED_CONTROL[NUMBER_OF_LEDS] = {0};
 
 /**
  * @brief See description for function prototype in ZW_basis_api.h.
@@ -80,6 +91,28 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
     );
   assert(bWasTaskCreated);
 
+  //
+  // Create LED background task
+  //
+  board_indicator_queue_init();
+  
+  // Interact with the hardware in a background task
+  ZW_UserTask_Buffer_t ledTaskBuffer;
+  ledTaskBuffer.taskBuffer = &LEDTaskBuffer;
+  ledTaskBuffer.stackBuffer = LEDStackBuffer;
+  ledTaskBuffer.stackBufferLength = LED_TASK_STACK_SIZE;
+
+  // Create the task setting-structure!
+  ZW_UserTask_t task;
+  task.pTaskFunc = (TaskFunction_t)Board_IndicatorTask;
+  task.pTaskName = "LED";
+  task.pUserTaskParam = NULL;
+  task.priority = USERTASK_PRIORITY_NORMAL;
+  task.taskBuffer = &ledTaskBuffer;
+
+  // Create the task!
+  ZW_UserTask_CreateTask(&task, &m_xTaskHandleLED);
+
   return(APPLICATION_RUNNING);
 }
 
@@ -96,8 +129,9 @@ static void ApplicationTask(SApplicationHandles* pAppHandles)
   ZAF_PrintAppInfo();
 #endif
 
-  // TODO: Add LED driver and re-enable this
-  // app_hw_init();
+  // Initialize NC-specific hardware
+  // except the LED which gets initialized by the board_indicator module
+  Board_IndicateStatus(BOARD_STATUS_IDLE);
 
   /* Enter SmartStart*/
   /* Protocol will commence SmartStart only if the node is NOT already included in the network */
@@ -126,6 +160,15 @@ zaf_event_distributor_app_event_manager(const uint8_t event)
   DPRINTF("zaf_event_distributor_app_event_manager Ev: %d\r\n", event);
 
   switch (event) {
+    case EVENT_APP_LED_CONTROL:
+      set_color_buffer(LED_CONTROL);
+      break;
+
+  case EVENT_APP_LED_OFF:
+    // For some reason we cannot use a static here, because its last byte gets overwritten somehow
+    set_color_buffer((rgb_t[NUMBER_OF_LEDS]){0});
+    break;
+
     case EVENT_APP_BOOTLOADER:
 
       bootloader_rebootAndInstall();
