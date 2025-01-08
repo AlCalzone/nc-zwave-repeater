@@ -59,20 +59,20 @@
 // <i> Default: 250
 // <i> Any button press shorter than this value and longer than MIN_VALID_BUTTON_PRESS_DURATION
 // will be considered SHORT_BUTTON_PRESS.
-#define SHORT_BUTTON_PRESS_DURATION   (400)
+#define SHORT_BUTTON_PRESS_DURATION   (750)
 
 // <o MEDIUM_BUTTON_PRESS_DURATION> Duration of MEDIUM button presses
 // <i> Default: 1000
 // <i> Any button press shorter than this value and longer SHORT_BUTTON_PRESS than will
 // be considered MEDIUM_BUTTON_PRESS.
-#define MEDIUM_BUTTON_PRESS_DURATION   (1500)
+#define MEDIUM_BUTTON_PRESS_DURATION   (3000)
 
 // <o LONG_BUTTON_PRESS_DURATION> Duration of LONG button presses
 // <i> Default: 5000
 // <i> Any button press shorter than this value and longer MEDIUM_BUTTON_PRESS than will
 // be consideredLONG_BUTTON_PRESS. Any button press longer than this value will be
 // considered VERY_LONG_BUTTON_PRESS
-#define LONG_BUTTON_PRESS_DURATION   (5000)
+#define LONG_BUTTON_PRESS_DURATION   (15000)
 
 // </h>
 
