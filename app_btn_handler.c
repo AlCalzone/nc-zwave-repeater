@@ -77,7 +77,7 @@
  *
  * If the duration does not match any of the predefined values, no event is enqueued.
  */
-void app_button_press_btn_1_handler(uint8_t duration)
+void app_button_press_btn_0_handler(uint8_t duration)
 {
   uint8_t app_event = EVENT_EMPTY;
 
