@@ -48,6 +48,7 @@ void Board_IndicatorTask(
 				}
 
 				zaf_event_distributor_enqueue_app_event(EVENT_APP_LED_CONTROL);
+				zaf_event_distributor_enqueue_app_event(EVENT_APP_CLEAR_INDICATOR_FLAG);
 				vTaskDelay(pdMS_TO_TICKS(SOLID_COLOR_WAIT_TIME_MS));
 				break;
 			}
@@ -77,6 +78,7 @@ void Board_IndicatorTask(
 					// When blinking indefinitely, abort when the next command is received
 					if (blink.num_cycles == BLINK_INDEFINITELY && uxQueueMessagesWaiting(xQueue) > 0)
 					{
+						zaf_event_distributor_enqueue_app_event(EVENT_APP_CLEAR_INDICATOR_FLAG);
 						break;
 					}
 				}
@@ -86,6 +88,8 @@ void Board_IndicatorTask(
 					zaf_event_distributor_enqueue_app_event(EVENT_APP_LED_CONTROL);
 					vTaskDelay(pdMS_TO_TICKS(SOLID_COLOR_WAIT_TIME_MS));
 				}
+
+				zaf_event_distributor_enqueue_app_event(EVENT_APP_CLEAR_INDICATOR_FLAG);
 
 				break;
 			}

@@ -50,6 +50,7 @@ component:
 - {id: zw_cc_common}
 - {id: zw_cc_deviceresetlocally}
 - {id: zw_cc_firmwareupdate}
+- {id: zw_cc_indicator}
 - {id: zw_cc_manufacturerspecific}
 - {id: zw_cc_multi_channel_control}
 - {id: zw_cc_powerlevel}
