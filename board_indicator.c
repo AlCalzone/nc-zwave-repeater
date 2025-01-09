@@ -2,14 +2,36 @@
 // to work with our custom LEDs
 
 #include "board_indicator.h"
+#include "board_indicator_control.h"
 #include "drivers/ws2812.h"
 #include "app_led_task.h"
+#include "CC_ColorSwitch.h"
 
 extern bool m_indicator_active_from_cc;
 rgb_t IDLE_COLOR = {4, 0, 0};
 rgb_t OFF_COLOR = {0, 0, 0};
 rgb_t LEARNMODE_COLOR = {255, 0, 255};
 rgb_t DEFAULT_COLOR = {255, 0, 0};
+
+void set_idle_color(rgb_t *color)
+{
+	IDLE_COLOR.R = color->R;
+	IDLE_COLOR.G = color->G;
+	IDLE_COLOR.B = color->B;
+}
+
+uint8_t cc_color_switch_get_default_value(s_colorComponent* colorComponent) {
+	switch (colorComponent->colorId) {
+		case ECOLORCOMPONENT_RED:
+			return IDLE_COLOR.R;
+		case ECOLORCOMPONENT_GREEN:
+			return IDLE_COLOR.G;
+		case ECOLORCOMPONENT_BLUE:
+			return IDLE_COLOR.B;
+		default:
+			return 0;
+	}
+}
 
 bool indicator_solid(rgb_t *color)
 {

@@ -29,6 +29,10 @@
 #endif
 #include "ZW_UserTask.h"
 #include "app_led_task.h"
+#include "CC_ColorSwitch.h"
+#include "cc_color_switch_config_api.h"
+#include "cc_color_switch_io.h"
+#include "board_indicator_control.h"
 
 #ifdef SL_CATALOG_ZW_CLI_COMMON_PRESENT
 #include "zw_cli_common.h"
@@ -46,9 +50,34 @@ static TaskHandle_t m_xTaskHandleLED   = NULL;
 static StaticTask_t LEDTaskBuffer;
 static uint8_t LEDStackBuffer[LED_TASK_STACK_SIZE];
 
-rgb_t LED_OFF[NUMBER_OF_LEDS] = {0};
 rgb_t LED_CONTROL[NUMBER_OF_LEDS] = {0};
 bool m_indicator_active_from_cc = false;
+
+bool restore_color_switch_cc_state() {
+  s_colorComponent* components = cc_color_switch_get_colorComponents();
+  for (int i = 0; i < cc_color_switch_get_length_colorComponents(); i++) {
+    bool result = cc_color_switch_read(i, &components[i]);
+    if (!result) {
+      return false;
+    }
+  }
+
+  uint8_t red = ZAF_Actuator_GetCurrentValue(&components[0].obj);
+  uint8_t green = ZAF_Actuator_GetCurrentValue(&components[1].obj);
+  uint8_t blue = ZAF_Actuator_GetCurrentValue(&components[2].obj);
+
+  if (red != 0 || green != 0 || blue != 0) {
+    rgb_t color = {
+        .R = red,
+        .G = green,
+        .B = blue
+    };
+    set_idle_color(&color);
+  }
+
+  return true;
+}
+
 
 /**
  * @brief See description for function prototype in ZW_basis_api.h.
@@ -96,7 +125,7 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
   // Create LED background task
   //
   board_indicator_queue_init();
-  
+
   // Interact with the hardware in a background task
   ZW_UserTask_Buffer_t ledTaskBuffer;
   ledTaskBuffer.taskBuffer = &LEDTaskBuffer;
@@ -114,7 +143,7 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
   // Create the task!
   ZW_UserTask_CreateTask(&task, &m_xTaskHandleLED);
 
-  return(APPLICATION_RUNNING);
+  return (APPLICATION_RUNNING);
 }
 
 /**
@@ -130,9 +159,12 @@ static void ApplicationTask(SApplicationHandles* pAppHandles)
   ZAF_PrintAppInfo();
 #endif
 
-  // Initialize NC-specific hardware
-  // except the LED which gets initialized by the board_indicator module
-  Board_IndicateStatus(BOARD_STATUS_IDLE);
+  // Restore Color Switch CC state from NVM - if that fails, use the default idle color
+  if (!restore_color_switch_cc_state()) {
+    Board_IndicateStatus(BOARD_STATUS_IDLE);
+  }
+
+  // Initialize other NC-specific hardware
 
   /* Enter SmartStart*/
   /* Protocol will commence SmartStart only if the node is NOT already included in the network */
@@ -140,9 +172,11 @@ static void ApplicationTask(SApplicationHandles* pAppHandles)
 
   // Wait for and process events
   DPRINT("LED Bulb Event processor Started\r\n");
-  for (;; ) {
+  for (;;)
+  {
     unhandledEvents = zaf_event_distributor_distribute();
-    if (0 != unhandledEvents) {
+    if (0 != unhandledEvents)
+    {
       DPRINTF("Unhandled Events: 0x%08lx\n", unhandledEvents);
 #ifdef UNIT_TEST
       return;
@@ -155,36 +189,69 @@ static void ApplicationTask(SApplicationHandles* pAppHandles)
  * @brief The core state machine of this sample application.
  * @param event The event that triggered the call of zaf_event_distributor_app_event_manager.
  */
-void
-zaf_event_distributor_app_event_manager(const uint8_t event)
+void zaf_event_distributor_app_event_manager(const uint8_t event)
 {
   DPRINTF("zaf_event_distributor_app_event_manager Ev: %d\r\n", event);
 
-  switch (event) {
-    case EVENT_APP_LED_CONTROL:
-      set_color_buffer(LED_CONTROL);
-      break;
+  switch (event)
+  {
+  case EVENT_APP_LED_CONTROL:
+    set_color_buffer(LED_CONTROL);
+    break;
 
   case EVENT_APP_LED_OFF:
     // For some reason we cannot use a static here, because its last byte gets overwritten somehow
     set_color_buffer((rgb_t[NUMBER_OF_LEDS]){0});
     break;
 
-    case EVENT_APP_CLEAR_INDICATOR_FLAG:
-      m_indicator_active_from_cc = false;
-      break;
+  case EVENT_APP_CLEAR_INDICATOR_FLAG:
+    m_indicator_active_from_cc = false;
+    break;
 
-    case EVENT_APP_BOOTLOADER:
+  case EVENT_APP_BOOTLOADER:
 
-      bootloader_rebootAndInstall();
-      break;
+    bootloader_rebootAndInstall();
+    break;
 
-    default:
-      // Unknown event - do nothing.
-      break;
+  default:
+    // Unknown event - do nothing.
+    break;
   }
 
 #ifdef SL_CATALOG_ZW_CLI_COMMON_PRESENT
   cli_log_system_events(event);
 #endif
+}
+
+// Gets called when the current color was changed through Color Switch CC
+void cc_color_switch_cb(s_colorComponent *colorComponent)
+{
+
+  // Get the current color
+  s_colorComponent *components = cc_color_switch_get_colorComponents();
+  uint8_t red = ZAF_Actuator_GetTargetValue(&components[0].obj);
+  uint8_t green = ZAF_Actuator_GetTargetValue(&components[1].obj);
+  uint8_t blue = ZAF_Actuator_GetTargetValue(&components[2].obj);
+
+  // And merge it with the new value
+  uint8_t new_value = ZAF_Actuator_GetTargetValue(&colorComponent->obj);
+  switch (colorComponent->colorId)
+  {
+  case ECOLORCOMPONENT_RED:
+    red = new_value;
+    break;
+  case ECOLORCOMPONENT_GREEN:
+    green = new_value;
+    break;
+  case ECOLORCOMPONENT_BLUE:
+    blue = new_value;
+    break;
+  default:
+    // Unsupported color changed
+    return;
+  }
+
+  rgb_t color = {
+      green, red, blue};
+  indicator_solid(&color);
 }

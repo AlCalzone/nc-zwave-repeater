@@ -17,6 +17,8 @@
 		"stdbool.h": "c",
 		"string.h": "c",
 		"app_hw.h": "c",
-		"zaf_applicationevents.h": "c"
+		"zaf_applicationevents.h": "c",
+		"sl_cli.h": "c",
+		"cc_color_switch_io.h": "c"
 	}
 }
