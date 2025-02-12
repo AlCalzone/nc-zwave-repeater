@@ -30,7 +30,7 @@ include:
   file_list:
   - {path: events.h}
   - {path: app_rgb_led.h}
-sdk: {id: simplicity_sdk, version: 2024.12.0}
+sdk: {id: simplicity_sdk, version: 2024.12.1}
 toolchain_settings: []
 component:
 - {id: EFR32ZG23A020F512GM40}
