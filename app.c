@@ -96,10 +96,8 @@ static void ApplicationTask(SApplicationHandles* pAppHandles)
   ZAF_PrintAppInfo();
 #endif
 
-#if (!defined(SL_CATALOG_SILICON_LABS_ZWAVE_APPLICATION_PRESENT) && !defined(UNIT_TEST))
-  /* This preprocessor statement can be deleted from the source code */
-  app_hw_init();
-#endif
+  // TODO: Add LED driver and re-enable this
+  // app_hw_init();
 
   /* Enter SmartStart*/
   /* Protocol will commence SmartStart only if the node is NOT already included in the network */
@@ -128,8 +126,13 @@ zaf_event_distributor_app_event_manager(const uint8_t event)
   DPRINTF("zaf_event_distributor_app_event_manager Ev: %d\r\n", event);
 
   switch (event) {
+    case EVENT_APP_BOOTLOADER:
+
+      bootloader_rebootAndInstall();
+      break;
+
     default:
-      // Unknow event - do nothing.
+      // Unknown event - do nothing.
       break;
   }
 

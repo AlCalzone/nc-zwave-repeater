@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"tsconfig*.json": "jsonc",
+		"tslint*.json": "jsonc",
+		"*.vbhtml": "razor",
+		"board_indicator.h": "c",
+		"sl_component_catalog.h": "c",
+		"events.h": "c"
+	}
+}

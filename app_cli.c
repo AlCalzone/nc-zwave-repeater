@@ -61,6 +61,14 @@
 //                          Public Function Definitions
 // -----------------------------------------------------------------------------
 
-
+/******************************************************************************
+ * CLI - bootloader: Reboot into bootloader
+ *****************************************************************************/
+void cli_bootloader(sl_cli_command_arg_t *arguments)
+{
+  (void) arguments;
+  app_log_info("Rebooting into bootloader\r\n");
+  zaf_event_distributor_enqueue_app_event(EVENT_APP_BOOTLOADER);
+}
 
 #endif // SL_CATALOG_ZW_CLI_COMMON_PRESENT
