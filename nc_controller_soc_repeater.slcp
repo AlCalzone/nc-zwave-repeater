@@ -20,10 +20,6 @@ source:
 - {path: app.c}
 - {path: main.c}
 - {path: app_cli.c}
-- {path: app_btn_handler.c}
-- {path: app_cc_color_switch_switch_callbacks.c}
-- {path: app_cc_multilevel_switch_callbacks.c}
-- {path: app_rgb_led.c}
 tag: [prebuilt_demo]
 include:
 - path: .
@@ -42,28 +38,20 @@ component:
 - {id: emlib_msc}
 - {id: emlib_timer}
 - {id: gpiointerrupt}
+- instance: [inst]
+  id: iostream_usart
+- {id: led}
 - {id: mpu}
-- instance: [led1]
-  id: pwm
-- instance: [btn0, btn1]
-  id: simple_button
-- instance: [led0]
-  id: simple_led
 - {id: sl_system}
 - {id: zaf_soc}
 - {id: zw_appshw}
 - {id: zw_cc_association}
 - {id: zw_cc_basic}
-- {id: zw_cc_color_switch}
-- {id: zw_cc_color_switch_nvm}
 - {id: zw_cc_common}
 - {id: zw_cc_deviceresetlocally}
 - {id: zw_cc_firmwareupdate}
-- {id: zw_cc_indicator}
 - {id: zw_cc_manufacturerspecific}
 - {id: zw_cc_multi_channel_control}
-- {id: zw_cc_multilevel_switch_support}
-- {id: zw_cc_multilevel_switch_support_nvm}
 - {id: zw_cc_powerlevel}
 - {id: zw_cc_supervision}
 - {id: zw_cc_version}
@@ -77,15 +65,6 @@ component:
 define:
 - {name: APP_PROPERTIES_CONFIG_FILE, value: <application_properties_config.h>}
 - {name: FILE_ID_APPLICATIONDATA, value: '0x00000'}
-config_file:
-- {path: config/cc_config/LEDBulb.cc_config, directory: cc_config}
-- {path: config/sample_keys/sample_encrypt.key, directory: sample_keys}
-- {path: config/sample_keys/sample_sign.key, directory: sample_keys}
-template_contribution:
-- name: cli_command
-  priority: 0
-  value: {name: get_rgb_values, handler: cli_get_rgb_values, help: Get RGB LED values.
-      The range is 0-65535}
 configuration:
 - {name: SHORT_BUTTON_PRESS_DURATION, value: (400)}
 - {name: MEDIUM_BUTTON_PRESS_DURATION, value: (1500)}
@@ -131,7 +110,7 @@ configuration:
 - {name: SL_PSA_ITS_SUPPORT_V1_DRIVER, value: '1'}
 - {name: SL_PSA_ITS_SUPPORT_V2_DRIVER, value: '1'}
 - {name: SL_PSA_ITS_SUPPORT_V3_DRIVER, value: '1'}
-- {name: ZAF_APP_NAME, value: '"led_bulb"'}
+- {name: ZAF_APP_NAME, value: '"nc_repeater"'}
 - {name: SL_RAIL_UTIL_RAIL_POWER_MANAGER_INIT, value: '0'}
 ui_hints:
   highlight:

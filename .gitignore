@@ -1,6 +1,7 @@
 GNU*/
 artifact/
 .pdm/
+.uceditor/
 .cproject
 .projectlinkstore
 .settings/

@@ -1,9 +1,9 @@
 /***************************************************************************//**
  * @file
- * @brief PWM Driver Instance Initialization
+ * @brief Simple Button Driver User Config
  *******************************************************************************
  * # License
- * <b>Copyright 2020 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2024 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * SPDX-License-Identifier: Zlib
@@ -28,33 +28,34 @@
  *
  ******************************************************************************/
 
-#include "sl_pwm.h"
-
-#include "sl_pwm_init_led1_config.h"
-
+#ifndef SL_SIMPLE_BUTTON_INSTANCE0_CONFIG_H
+#define SL_SIMPLE_BUTTON_INSTANCE0_CONFIG_H
 
 #include "sl_gpio.h"
+#include "sl_simple_button.h"
 
+// <<< Use Configuration Wizard in Context Menu >>>
 
-sl_pwm_instance_t sl_pwm_led1 = {
-  .timer = SL_PWM_LED1_PERIPHERAL,
-  .channel = (uint8_t)(SL_PWM_LED1_OUTPUT_CHANNEL),
-  .port = (uint8_t)(SL_PWM_LED1_OUTPUT_PORT),
-  .pin = (uint8_t)(SL_PWM_LED1_OUTPUT_PIN),
-#if defined(SL_PWM_LED1_OUTPUT_LOC)
-  .location = (uint8_t)(SL_PWM_LED1_OUTPUT_LOC),
+// <o SL_SIMPLE_BUTTON_INSTANCE0_MODE>
+// <SL_SIMPLE_BUTTON_MODE_INTERRUPT=> Interrupt
+// <SL_SIMPLE_BUTTON_MODE_POLL_AND_DEBOUNCE=> Poll and Debounce
+// <SL_SIMPLE_BUTTON_MODE_POLL=> Poll
+// <i> Default: SL_SIMPLE_BUTTON_MODE_INTERRUPT
+#define SL_SIMPLE_BUTTON_INSTANCE0_MODE       SL_SIMPLE_BUTTON_MODE_INTERRUPT
+// <<< end of configuration section >>>
+
+// <<< sl:start pin_tool >>>
+
+// <gpio> SL_SIMPLE_BUTTON_INSTANCE0
+// $[GPIO_SL_SIMPLE_BUTTON_INSTANCE0]
+#ifndef SL_SIMPLE_BUTTON_INSTANCE0_PORT         
+#define SL_SIMPLE_BUTTON_INSTANCE0_PORT          SL_GPIO_PORT_C
 #endif
-};
+#ifndef SL_SIMPLE_BUTTON_INSTANCE0_PIN          
+#define SL_SIMPLE_BUTTON_INSTANCE0_PIN           5
+#endif
+// [GPIO_SL_SIMPLE_BUTTON_INSTANCE0]$
 
+// <<< sl:end pin_tool >>>
 
-void sl_pwm_init_instances(void)
-{
-
-  sl_pwm_config_t pwm_led1_config = {
-    .frequency = SL_PWM_LED1_FREQUENCY,
-    .polarity = SL_PWM_LED1_POLARITY,
-  };
-
-  sl_pwm_init(&sl_pwm_led1, &pwm_led1_config);
-
-}
+#endif // SL_SIMPLE_BUTTON_BTN1_CONFIG_H
