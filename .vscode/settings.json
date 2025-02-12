@@ -5,6 +5,18 @@
 		"*.vbhtml": "razor",
 		"board_indicator.h": "c",
 		"sl_component_catalog.h": "c",
-		"events.h": "c"
+		"events.h": "c",
+		"dmadrv.h": "c",
+		"ws2812.h": "c",
+		"app_led_task.h": "c",
+		"freertos.h": "c",
+		"queuenotifying.h": "c",
+		"queue.h": "c",
+		"stdint.h": "c",
+		"sizeof.h": "c",
+		"stdbool.h": "c",
+		"string.h": "c",
+		"app_hw.h": "c",
+		"zaf_applicationevents.h": "c"
 	}
 }

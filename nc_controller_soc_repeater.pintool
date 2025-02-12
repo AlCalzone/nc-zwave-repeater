@@ -4,9 +4,20 @@
     <property object="DefaultMode" propertyId="mode.diagramLocation" value="100, 100"/>
     <property object="PA07" propertyId="pin.name" value=""/>
     <property object="PA08" propertyId="pin.name" value=""/>
+    <property object="PC00" propertyId="pin.name" value=""/>
+    <property object="PC01" propertyId="pin.name" value=""/>
+    <property object="PC02" propertyId="pin.name" value=""/>
+    <property object="PC03" propertyId="pin.name" value="WS2812_EN"/>
+    <property object="PC03" propertyId="pin.reserve" value="Reserved"/>
     <property object="PC05" propertyId="ABModule.selectedRequirement" value="gpio%T%SL_SIMPLE_BUTTON_INSTANCE0%T%sl_simple_button_instance0_config.h"/>
     <property object="PC05" propertyId="pin.name" value="BTN0"/>
     <property object="PC05" propertyId="pin.reserve" value="Reserved"/>
+    <property object="PORTIO" propertyId="portio.eusart1.enable.rx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.eusart1.enable.sclk" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.eusart1.enable.tx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.eusart1.location.rx" value="32"/>
+    <property object="PORTIO" propertyId="portio.eusart1.location.sclk" value="33"/>
+    <property object="PORTIO" propertyId="portio.eusart1.location.tx" value="34"/>
     <property object="PORTIO" propertyId="portio.usart0.enable.rx" value="Enabled"/>
     <property object="PORTIO" propertyId="portio.usart0.enable.tx" value="Enabled"/>
     <property object="PORTIO" propertyId="portio.usart0.location.rx" value="7"/>
