@@ -38,6 +38,8 @@ component:
 - {id: emlib_msc}
 - {id: emlib_timer}
 - {id: gpiointerrupt}
+- instance: [gps]
+  id: i2cspm
 - instance: [inst]
   id: iostream_usart
 - {id: led}

@@ -19,6 +19,8 @@
 		"app_hw.h": "c",
 		"zaf_applicationevents.h": "c",
 		"sl_cli.h": "c",
-		"cc_color_switch_io.h": "c"
+		"cc_color_switch_io.h": "c",
+		"apptimer.h": "c",
+		"nvm3_default_config.h": "c"
 	}
 }

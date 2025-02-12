@@ -17,6 +17,7 @@
 #include "app_rta_internal.h"
 #include "sl_gpio.h"
 #include "gpiointerrupt.h"
+#include "sl_i2cspm_instances.h"
 #include "sl_iostream_stdlib_config.h"
 #include "sl_iostream_init_usart_instances.h"
 #include "sl_mbedtls.h"
@@ -58,6 +59,7 @@ void sl_driver_init(void)
 {
   sl_gpio_init();
   GPIOINT_Init();
+  sl_i2cspm_init_instances();
   sl_simple_button_init_instances();
 }
 

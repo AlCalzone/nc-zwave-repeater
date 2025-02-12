@@ -44,6 +44,11 @@
 
 static void ApplicationTask(SApplicationHandles* pAppHandles);
 
+#include <AppTimer.h>            // GeoLocCC
+#include "SAM-M8Q.h"
+static SSwTimer I2CTimer;
+static TaskHandle_t m_AppTaskHandle;
+
 #define LED_TASK_STACK_SIZE           200  // [bytes]
 static TaskHandle_t m_xTaskHandleLED   = NULL;
 // Task and stack buffer allocation for the default/main application task!
@@ -105,6 +110,8 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
     ZW_SetMfgTokenDataCountryRegion((void*) &RadioConfig->eRegion);
   }
 
+  AppTimerInit(EAPPLICATIONEVENT_TIMER,NULL); // GPS support
+
   /*
    * Register the main application task.
    *
@@ -158,6 +165,11 @@ static void ApplicationTask(SApplicationHandles* pAppHandles)
 #ifdef DEBUGPRINT
   ZAF_PrintAppInfo();
 #endif
+
+  m_AppTaskHandle = xTaskGetCurrentTaskHandle();
+  AppTimerSetReceiverTask(m_AppTaskHandle);
+  AppTimerRegister(&I2CTimer, false, ZCB_I2CTimerCallBack);
+  TimerStart( &I2CTimer, GPS_POLLING_INTERVAL);
 
   // Restore Color Switch CC state from NVM - if that fails, use the default idle color
   if (!restore_color_switch_cc_state()) {

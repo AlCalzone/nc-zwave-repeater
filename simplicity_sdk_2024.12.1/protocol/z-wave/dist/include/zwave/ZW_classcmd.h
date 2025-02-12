@@ -708,6 +708,9 @@
   ZW_GEOGRAPHIC_LOCATION_GET_FRAME                             ZW_GeographicLocationGetFrame;\
   ZW_GEOGRAPHIC_LOCATION_REPORT_FRAME                          ZW_GeographicLocationReportFrame;\
   ZW_GEOGRAPHIC_LOCATION_SET_FRAME                             ZW_GeographicLocationSetFrame;\
+  ZW_GEOGRAPHIC_LOCATION_GET_V2_FRAME                             ZW_GeographicLocationGetV2Frame;\
+  ZW_GEOGRAPHIC_LOCATION_REPORT_V2_FRAME                          ZW_GeographicLocationReportV2Frame;\
+  ZW_GEOGRAPHIC_LOCATION_SET_V2_FRAME                             ZW_GeographicLocationSetV2Frame;\
 /* Command class Grouping Name */\
   ZW_GROUPING_NAME_GET_FRAME                                   ZW_GroupingNameGetFrame;\
   ZW_GROUPING_NAME_REPORT_FRAME                                ZW_GroupingNameReportFrame;\
@@ -6565,6 +6568,7 @@
 #define GEOGRAPHIC_LOCATION_SET_LEVEL_LONG_SIGN_BIT_MASK                                 0x80
 #define GEOGRAPHIC_LOCATION_SET_LEVEL2_LATITUDE_MINUTES_MASK                             0x7F
 #define GEOGRAPHIC_LOCATION_SET_LEVEL2_LAT_SIGN_BIT_MASK                                 0x80
+#include "CC_GeographicLoc2.h"
 
 /* Grouping Name command class commands */
 #define GROUPING_NAME_VERSION                                                            0x01
@@ -23540,6 +23544,8 @@ typedef struct _ZW_GEOGRAPHIC_LOCATION_SET_FRAME_
     uint8_t   latitudeDegrees;              /**/
     uint8_t   level2;                       /* masked byte */
 } ZW_GEOGRAPHIC_LOCATION_SET_FRAME;
+
+#include "CC_GeographicLoc3.h"
 
 /************************************************************/
 /* Grouping Name Get command class structs */               
