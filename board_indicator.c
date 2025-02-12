@@ -5,10 +5,11 @@
 #include "drivers/ws2812.h"
 #include "app_led_task.h"
 
-static bool m_indicator_active_from_cc = false;
+extern bool m_indicator_active_from_cc;
 rgb_t IDLE_COLOR = {4, 0, 0};
 rgb_t OFF_COLOR = {0, 0, 0};
 rgb_t LEARNMODE_COLOR = {255, 0, 255};
+rgb_t DEFAULT_COLOR = {255, 0, 0};
 
 bool indicator_solid(rgb_t *color)
 {
@@ -23,7 +24,10 @@ bool indicator_solid(rgb_t *color)
 		.mode = INDICATOR_SOLID,
 		.mode_data.solid = solid,
 	};
-	return board_indicator_queue_command(&command);
+
+	bool result = board_indicator_queue_command(&command);
+	m_indicator_active_from_cc = false;
+	return result;
 }
 
 bool indicator_blink(rgb_t *color, uint32_t on_time_ms, uint32_t off_time_ms, uint32_t num_cycles, bool stay_on)
@@ -48,7 +52,6 @@ bool indicator_blink(rgb_t *color, uint32_t on_time_ms, uint32_t off_time_ms, ui
 
 void Board_IndicateStatus(board_status_t status)
 {
-	// TODO
 	if (status == BOARD_STATUS_POWER_DOWN)
 	{
 		indicator_solid(&OFF_COLOR);
@@ -78,17 +81,68 @@ bool Board_IndicatorControl(uint32_t on_time_ms,
 							uint32_t num_cycles,
 							bool called_from_indicator_cc)
 {
-	// TODO run the LED stuff on background task
-	(void)called_from_indicator_cc;
-	// TODO: m_indicator_active_from_cc = called_from_indicator_cc;
 
-	rgb_t colors[NUMBER_OF_LEDS] = {};
+	// Remember original color to be restored later
+	rgb_t colors[NUMBER_OF_LEDS] = {0};
 	get_color_buffer(colors);
 
-	return indicator_blink(&colors[0], on_time_ms, off_time_ms, num_cycles, false);
+	// Indicator CC indicates indefinite blinking with 0
+	if (num_cycles == 0)
+	{
+		num_cycles = BLINK_INDEFINITELY;
+	}
+
+	bool result;
+	if (called_from_indicator_cc || (colors[0].R == 0 && colors[0].G == 0 && colors[0].B == 0))
+	{
+		result = indicator_blink(&DEFAULT_COLOR, on_time_ms, off_time_ms, num_cycles, false);
+	}
+	else
+	{
+		result = indicator_blink(&colors[0], on_time_ms, off_time_ms, num_cycles, false);
+	}
+	if (result)
+	{
+		m_indicator_active_from_cc = called_from_indicator_cc;
+	}
+
+	if (m_indicator_active_from_cc && num_cycles != BLINK_INDEFINITELY)
+	{
+		indicator_solid(&colors[0]);
+	}
+
+	return result;
 }
 
 bool Board_IsIndicatorActive(void)
 {
 	return m_indicator_active_from_cc;
+}
+
+void cc_indicator_handler(uint32_t on_time_ms, uint32_t off_time_ms, uint32_t num_cycles)
+{
+	// V1 indicator handling
+	if (num_cycles == 0 && on_time_ms == 0 && off_time_ms == 0) {
+		indicator_solid(&IDLE_COLOR);
+		return;
+	} else if (num_cycles == 0xff && on_time_ms == 0xff && off_time_ms == 0xff) {
+		indicator_solid(&DEFAULT_COLOR);
+		return;
+	}
+	
+	if (num_cycles == 0)
+	{
+		num_cycles = BLINK_INDEFINITELY;
+	}
+
+	// Restore original color after blinking
+	rgb_t colors[NUMBER_OF_LEDS] = {0};
+	get_color_buffer(colors);
+
+	m_indicator_active_from_cc = indicator_blink(&DEFAULT_COLOR, on_time_ms, off_time_ms, num_cycles, false);
+
+	if (num_cycles != BLINK_INDEFINITELY)
+	{
+		indicator_solid(&colors[0]);
+	}
 }

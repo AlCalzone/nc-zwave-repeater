@@ -48,6 +48,7 @@ static uint8_t LEDStackBuffer[LED_TASK_STACK_SIZE];
 
 rgb_t LED_OFF[NUMBER_OF_LEDS] = {0};
 rgb_t LED_CONTROL[NUMBER_OF_LEDS] = {0};
+bool m_indicator_active_from_cc = false;
 
 /**
  * @brief See description for function prototype in ZW_basis_api.h.
@@ -168,6 +169,10 @@ zaf_event_distributor_app_event_manager(const uint8_t event)
     // For some reason we cannot use a static here, because its last byte gets overwritten somehow
     set_color_buffer((rgb_t[NUMBER_OF_LEDS]){0});
     break;
+
+    case EVENT_APP_CLEAR_INDICATOR_FLAG:
+      m_indicator_active_from_cc = false;
+      break;
 
     case EVENT_APP_BOOTLOADER:
 
