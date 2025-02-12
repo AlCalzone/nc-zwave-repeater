@@ -47,6 +47,8 @@ component:
 - {id: zw_appshw}
 - {id: zw_cc_association}
 - {id: zw_cc_basic}
+- {id: zw_cc_color_switch}
+- {id: zw_cc_color_switch_nvm}
 - {id: zw_cc_common}
 - {id: zw_cc_deviceresetlocally}
 - {id: zw_cc_firmwareupdate}
