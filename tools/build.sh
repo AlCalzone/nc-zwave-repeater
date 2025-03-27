@@ -36,6 +36,7 @@ fi
 
 $SLC generate \
 	--project-file $PROJ_NAME.slcp \
+	--with simple_button:instance0 \
 	--export-destination build/ \
 	--sdk "$SDK" \
 	--no-copy \
