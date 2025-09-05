@@ -7,18 +7,19 @@ on:
     branches:
       # This avoids having duplicate builds in non-forked PRs
       - "master"
-    tags:
-      # normal versions
-      - "v[0-9]+.[0-9]+.[0-9]+"
-      # pre-releases
-      - "v[0-9]+.[0-9]+.[0-9]+-**"
+      - "sisdk-*"
+  release:
+    types:
+      - published
   pull_request: {}
-  workflow_dispatch: {}
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
   group: "build-firmware-${{ github.ref }}"
   cancel-in-progress: true
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -32,6 +33,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
 
       - name: Download Simplicity SDK
         run: |
@@ -69,17 +76,101 @@ jobs:
           SLC: /opt/slc_cli/slc
           COMMANDER: /opt/commander/commander
 
+      - name: Check build output
+        run: |
+          ls -la build/release
+
+      - name: Determine firmware version
+        id: version
+        run: |
+          VERSION=$(node tools/extract_version.mjs)
+          if [ "${{ github.event_name }}" == "release" ]; then
+            SUFFIX="$VERSION"
+          else
+            COMMIT=$(git rev-parse --short ${{ github.sha }})
+            SUFFIX="${VERSION}_${COMMIT}"
+          fi
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "SUFFIX=${SUFFIX}" >> $GITHUB_ENV
+
+      - name: Copy build artifacts
+        run: |
+          cp build/release/nc_controller_soc_repeater.hex artifact/zwa2_repeater.hex
+          cp build/release/nc_controller_soc_repeater.out artifact/zwa2_repeater.out
+          cp build/release/nc_controller_soc_repeater.map artifact/zwa2_repeater.map
+
+      - name: Compute checksums for HEX files
+        run: |
+          sha256sum artifact/zwa2_repeater.hex | cut -d" " -f1 > artifact/zwa2_repeater.hex.sha256
+          md5sum artifact/zwa2_repeater.hex | cut -d" " -f1 > artifact/zwa2_repeater.hex.md5
+
+      - name: Prepare files for upload
+        run: |
+          mkdir -p upload
+          cp artifact/zwa2_repeater.gbl upload/zwa2_repeater_${{ env.SUFFIX }}.gbl
+          echo "GBL=zwa2_repeater_${{ env.SUFFIX }}.gbl" >> $GITHUB_ENV
+          cp artifact/zwa2_repeater.hex upload/zwa2_repeater_${{ env.SUFFIX }}.hex
+          echo "HEX=zwa2_repeater_${{ env.SUFFIX }}.hex" >> $GITHUB_ENV
+          cp artifact/zwa2_repeater.hex.sha256 upload/zwa2_repeater_${{ env.SUFFIX }}.hex.sha256
+          echo "HEX_SHA256=zwa2_repeater_${{ env.SUFFIX }}.hex.sha256" >> $GITHUB_ENV
+          cp artifact/zwa2_repeater.hex.md5 upload/zwa2_repeater_${{ env.SUFFIX }}.hex.md5
+          echo "HEX_MD5=zwa2_repeater_${{ env.SUFFIX }}.hex.md5" >> $GITHUB_ENV
+          cp artifact/zwa2_repeater.out upload/zwa2_repeater_${{ env.SUFFIX }}.out
+          echo "OUT=zwa2_repeater_${{ env.SUFFIX }}.out" >> $GITHUB_ENV
+          cp artifact/zwa2_repeater.map upload/zwa2_repeater_${{ env.SUFFIX }}.map
+          echo "MAP=zwa2_repeater_${{ env.SUFFIX }}.map" >> $GITHUB_ENV
+
       - name: Upload GBL
         uses: actions/upload-artifact@v4
         with:
-          name: zwa2_repeater.gbl
-          path: artifact/zwa2_repeater.gbl
-
-      - name: Copy HEX file
-        run: cp build/release/nc_controller_soc_repeater.hex artifact/zwa2_repeater.hex
+          name: ${{ env.GBL }}
+          path: upload/${{ env.GBL }}
 
       - name: Upload HEX
         uses: actions/upload-artifact@v4
         with:
-          name: zwa2_repeater.hex
-          path: artifact/zwa2_repeater.hex
+          name: ${{ env.HEX }}
+          path: upload/${{ env.HEX }}
+
+      - name: Upload HEX SHAsum
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.HEX_SHA256 }}
+          path: upload/${{ env.HEX_SHA256 }}
+
+      - name: Upload HEX MD5sum
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.HEX_MD5 }}
+          path: upload/${{ env.HEX_MD5 }}
+
+      - name: Upload OUT
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.OUT }}
+          path: upload/${{ env.OUT }}
+
+      - name: Upload MAP
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.MAP }}
+          path: upload/${{ env.MAP }}
+
+      - name: Upload firmware package
+        uses: actions/upload-artifact@v4
+        with:
+          name: zwa2_repeater_${{ env.SUFFIX }}
+          path: upload/*.*
+
+      - name: Upload to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: upload/*.*
+
+      - name: Debug Build failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: slc_cli_log
+          path: /opt/slc_cli/bin/slc-cli/configuration/*.log
