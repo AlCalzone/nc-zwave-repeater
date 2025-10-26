@@ -35,10 +35,11 @@
 // <REGION_US_LR=> United States Long Range
 // <REGION_EU_LR=> Europe Long Range
 // <i> Default: REGION_DEFAULT
-#define ZW_REGION  REGION_EU_LR
+#define ZW_REGION  REGION_US_LR
 
 // </h>
 
 // <<< end of configuration section >>>
+
 
 #endif /* _ZW_REGION_CONFIG_H_ */
