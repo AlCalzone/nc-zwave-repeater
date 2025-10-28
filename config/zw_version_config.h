@@ -32,7 +32,7 @@
 
 // <o USER_APP_REVISION> Application Minor Version <0..255:1> <f.d>
 // <i> Default: 0
-#define USER_APP_REVISION  0
+#define USER_APP_REVISION  1
 
 // <o USER_APP_PATCH> Application Patch Version <0..255:1> <f.d>
 // <i> Default: 0
@@ -57,4 +57,5 @@
         #define APP_PATCH SDK_VERSION_PATCH
     #endif
 #endif
+
 #endif /* _ZW_VERSION_CONFIG_H_ */
