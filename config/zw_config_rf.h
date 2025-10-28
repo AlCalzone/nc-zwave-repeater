@@ -27,7 +27,7 @@
 // <o APP_MAX_TX_POWER> The maximum allowed Tx power in deci dBm for Z-Wave network <-200..200:1> <f.d>
 // <i> The maximum allowed Tx power in deci dBm for Z-Wave network
 // <i> Default: 200
-#define APP_MAX_TX_POWER  130
+#define APP_MAX_TX_POWER  -10
 
 // <o APP_MEASURED_0DBM_TX_POWER> The deci dBmoutput measured at a PA setting of 0dBm <-50..50:1> <f.d>
 // <i> The deci dBm output measured at a PA setting of 0dBm
@@ -42,5 +42,6 @@
 // </h>
 
 // <<< end of configuration section >>>
+
 
 #endif /* _ZW_CONFIG_RF_H_ */
