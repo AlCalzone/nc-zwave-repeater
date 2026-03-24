@@ -31,23 +31,38 @@
 // -----------------------------------------------------------------------------
 //                                   Includes
 // -----------------------------------------------------------------------------
+#include <stddef.h>
+#include <stdint.h>
+#include <strings.h>
 #include "sl_component_catalog.h"
 
 #ifdef SL_CATALOG_ZW_CLI_COMMON_PRESENT
 
+#include "MfgTokens.h"
+#include "ZAF_Common_interface.h"
 #include "zaf_event_distributor_soc.h"
 #include "sl_cli.h"
 #include "app_log.h"
 #include "ev_man.h"
 #include "events.h"
+#include "zaf_config.h"
+#include "zpal_misc.h"
+#include "zpal_radio.h"
 
 // -----------------------------------------------------------------------------
 //                              Macros and Typedefs
 // -----------------------------------------------------------------------------
+typedef struct {
+  const char *name;
+  zpal_radio_region_t region;
+} cli_region_name_t;
 
 // -----------------------------------------------------------------------------
 //                          Static Function Declarations
 // -----------------------------------------------------------------------------
+static bool sli_try_parse_region_name(const char *value, zpal_radio_region_t *region);
+static const char *sli_get_region_name(zpal_radio_region_t region);
+static void sli_log_supported_regions(void);
 
 // -----------------------------------------------------------------------------
 //                                Global Variables
@@ -56,6 +71,22 @@
 // -----------------------------------------------------------------------------
 //                                Static Variables
 // -----------------------------------------------------------------------------
+static const cli_region_name_t sli_region_names[] = {
+  { "EU", REGION_EU },
+  { "US", REGION_US },
+  { "ANZ", REGION_ANZ },
+  { "HK", REGION_HK },
+  { "IN", REGION_IN },
+  { "IL", REGION_IL },
+  { "RU", REGION_RU },
+  { "CN", REGION_CN },
+  { "US_LR", REGION_US_LR },
+  { "US-LR", REGION_US_LR },
+  { "EU_LR", REGION_EU_LR },
+  { "EU-LR", REGION_EU_LR },
+  { "JP", REGION_JP },
+  { "KR", REGION_KR },
+};
 
 // -----------------------------------------------------------------------------
 //                          Public Function Definitions
@@ -69,6 +100,89 @@ void cli_bootloader(sl_cli_command_arg_t *arguments)
   (void) arguments;
   app_log_info("Rebooting into bootloader\r\n");
   zaf_event_distributor_enqueue_app_event(EVENT_APP_BOOTLOADER);
+}
+
+/******************************************************************************
+ * CLI - set_region: Update the configured RF region token
+ *****************************************************************************/
+void cli_set_region(sl_cli_command_arg_t *arguments)
+{
+  zpal_radio_region_t active_region;
+  zpal_radio_region_t region;
+  const char *region_name;
+
+  if (sl_cli_get_argument_count(arguments) != 1) {
+    app_log_info("Usage: set_region <region>\r\n");
+    sli_log_supported_regions();
+    return;
+  }
+
+  region_name = sl_cli_get_argument_string(arguments, 0);
+  if (!sli_try_parse_region_name(region_name, &region)) {
+    app_log_info("Unknown region '%s'\r\n", region_name);
+    sli_log_supported_regions();
+    return;
+  }
+
+  if (!isRfRegionValid(region)) {
+    app_log_info("Region '%s' is not supported by this firmware\r\n", sli_get_region_name(region));
+    sli_log_supported_regions();
+    return;
+  }
+
+  active_region = zpal_radio_get_region();
+  ZW_SetMfgTokenDataCountryRegion(&region);
+  if (region == active_region) {
+    app_log_info("Configured region set to %s. Region already active, no reboot required.\r\n",
+                 sli_get_region_name(region));
+    return;
+  }
+
+  app_log_info("Configured region set to %s. Rebooting to apply the new region.\r\n",
+               sli_get_region_name(region));
+  zpal_reboot_with_info(ZAF_CONFIG_MANUFACTURER_ID, ZPAL_RESET_INFO_DEFAULT);
+}
+
+// -----------------------------------------------------------------------------
+//                          Static Function Definitions
+// -----------------------------------------------------------------------------
+
+static bool sli_try_parse_region_name(const char *value, zpal_radio_region_t *region)
+{
+  size_t i;
+
+  for (i = 0; i < (sizeof(sli_region_names) / sizeof(sli_region_names[0])); i++) {
+    if (strcasecmp(value, sli_region_names[i].name) == 0) {
+      *region = sli_region_names[i].region;
+      return true;
+    }
+  }
+
+  return false;
+}
+
+static const char *sli_get_region_name(zpal_radio_region_t region)
+{
+  switch (region) {
+    case REGION_EU:    return "EU";
+    case REGION_US:    return "US";
+    case REGION_ANZ:   return "ANZ";
+    case REGION_HK:    return "HK";
+    case REGION_IN:    return "IN";
+    case REGION_IL:    return "IL";
+    case REGION_RU:    return "RU";
+    case REGION_CN:    return "CN";
+    case REGION_US_LR: return "US_LR";
+    case REGION_EU_LR: return "EU_LR";
+    case REGION_JP:    return "JP";
+    case REGION_KR:    return "KR";
+    default:           return "Unknown";
+  }
+}
+
+static void sli_log_supported_regions(void)
+{
+  app_log_info("Accepted region names: EU US ANZ HK IN IL RU CN US_LR EU_LR JP KR\r\n");
 }
 
 #endif // SL_CATALOG_ZW_CLI_COMMON_PRESENT

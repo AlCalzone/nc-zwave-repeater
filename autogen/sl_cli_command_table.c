@@ -127,6 +127,7 @@ void cli_factory_reset(sl_cli_command_arg_t *arguments);
 void cli_get_dsk(sl_cli_command_arg_t *arguments);
 void cli_get_region(sl_cli_command_arg_t *arguments);
 void cli_bootloader(sl_cli_command_arg_t *arguments);
+void cli_set_region(sl_cli_command_arg_t *arguments);
 
 // Command structs. Names are in the format : cli_cmd_{command group name}_{command name}
 // In order to support hyphen in command and group name, every occurence of it while
@@ -161,6 +162,12 @@ static const sl_cli_command_info_t cli_cmd__bootloader = \
                   "",
                  {SL_CLI_ARG_END, });
 
+static const sl_cli_command_info_t cli_cmd__set_region = \
+  SL_CLI_COMMAND(cli_set_region,
+                 "Set the configured region token",
+                  "<region>",
+                 {SL_CLI_ARG_STRING, SL_CLI_ARG_END, });
+
 // Create group command tables and structs if cli_groups given
 // in template. Group name is suffixed with _group_table for tables
 // and group commands are cli_cmd_grp_( group name )
@@ -172,6 +179,7 @@ const sl_cli_command_entry_t sl_cli_default_command_table[] = {
   { "get_dsk", &cli_cmd__get_dsk, false },
   { "get_region", &cli_cmd__get_region, false },
   { "bootloader", &cli_cmd__bootloader, false },
+  { "set_region", &cli_cmd__set_region, false },
   { NULL, NULL, false },
 };
 
