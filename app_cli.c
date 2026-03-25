@@ -47,6 +47,7 @@
 #include "ev_man.h"
 #include "events.h"
 #include "zaf_config.h"
+#include "zaf_protocol_config.h"
 #include "zpal_misc.h"
 #include "zpal_radio.h"
 
