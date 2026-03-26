@@ -98,9 +98,11 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
 
   RadioConfig = zaf_get_radio_config();
 
+  bool nvm_init_done = ZAF_nvm_app_init();
+
   // Mirror how the controller firmware handles radio settings,
   // namely using the mfg token only as a fallback.
-  if (RepeaterConfigExists()) {
+  if (nvm_init_done && RepeaterConfigExists()) {
     ReadApplicationRfRegion(&RadioConfig->eRegion);
     ReadApplicationTxPowerlevel(&RadioConfig->iTxPowerLevelMax,
                                 &RadioConfig->iTxPowerLevelAdjust);
@@ -111,7 +113,9 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
       RadioConfig->eRegion = regionMfg;
     }
 
-    RepeaterConfigWriteDefaults(RadioConfig);
+    if (nvm_init_done) {
+      RepeaterConfigWriteDefaults(RadioConfig);
+    }
   }
 
   /*
