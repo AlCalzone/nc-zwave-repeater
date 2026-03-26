@@ -31,9 +31,7 @@
 // -----------------------------------------------------------------------------
 //                                   Includes
 // -----------------------------------------------------------------------------
-#include <errno.h>
 #include <stdbool.h>
-#include <stdlib.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <strings.h>
@@ -64,13 +62,13 @@ typedef struct {
 
 #define TX_POWER_LIMIT_MIN_DDBM     (-100)
 #define TX_POWER_ADJUST_LIMIT_DDBM  (100)
+#define DBM_TO_DDBM(value)          ((value) * 10)
 #define CLI_REBOOT_DELAY_MS         (50)
 
 // -----------------------------------------------------------------------------
 //                          Static Function Declarations
 // -----------------------------------------------------------------------------
 static bool sli_try_parse_region_name(const char *value, zpal_radio_region_t *region);
-static bool sli_try_parse_tx_power(const char *value, zpal_tx_power_t *tx_power);
 static const char *sli_get_region_name(zpal_radio_region_t region);
 static void sli_reboot_after_cli_delay(void);
 static bool sli_validate_powerlevel(zpal_tx_power_t tx_power_level,
@@ -193,9 +191,6 @@ void cli_set_powerlevel(sl_cli_command_arg_t *arguments)
   zpal_tx_power_t tx_power_level;
   zpal_tx_power_t tx_power_adjust;
   zpal_tx_power_t max_tx_power_lr;
-  const char *tx_power_level_str;
-  const char *tx_power_adjust_str;
-  const char *max_tx_power_lr_str;
   bool requires_reboot;
 
   if (sl_cli_get_argument_count(arguments) != 3) {
@@ -203,16 +198,9 @@ void cli_set_powerlevel(sl_cli_command_arg_t *arguments)
     return;
   }
 
-  tx_power_level_str = sl_cli_get_argument_string(arguments, 0);
-  tx_power_adjust_str = sl_cli_get_argument_string(arguments, 1);
-  max_tx_power_lr_str = sl_cli_get_argument_string(arguments, 2);
-
-  if (!sli_try_parse_tx_power(tx_power_level_str, &tx_power_level)
-      || !sli_try_parse_tx_power(tx_power_adjust_str, &tx_power_adjust)
-      || !sli_try_parse_tx_power(max_tx_power_lr_str, &max_tx_power_lr)) {
-    app_log_info("Invalid integer input. Usage: set_powerlevel <iTxPowerLevelMax> <iTxPowerLevelAdjust> <iTxPowerLevelMaxLR>\r\n");
-    return;
-  }
+  tx_power_level = (zpal_tx_power_t)sl_cli_get_argument_int16(arguments, 0);
+  tx_power_adjust = (zpal_tx_power_t)sl_cli_get_argument_int16(arguments, 1);
+  max_tx_power_lr = (zpal_tx_power_t)sl_cli_get_argument_int16(arguments, 2);
 
   if (!sli_validate_powerlevel(tx_power_level, tx_power_adjust, max_tx_power_lr)) {
     app_log_info("Invalid power levels. iTxPowerLevelMax range: %d..%d, iTxPowerLevelAdjust range: %d..%d, iTxPowerLevelMaxLR range: %d..%d\r\n",
@@ -220,8 +208,8 @@ void cli_set_powerlevel(sl_cli_command_arg_t *arguments)
                  (int)zpal_radio_get_maximum_tx_power(),
                  TX_POWER_LIMIT_MIN_DDBM,
                  TX_POWER_ADJUST_LIMIT_DDBM,
-                 (int)zpal_radio_get_minimum_lr_tx_power(),
-                 (int)zpal_radio_get_maximum_lr_tx_power());
+                 (int)DBM_TO_DDBM(zpal_radio_get_minimum_lr_tx_power()),
+                 (int)DBM_TO_DDBM(zpal_radio_get_maximum_lr_tx_power()));
     return;
   }
 
@@ -262,25 +250,6 @@ static bool sli_try_parse_region_name(const char *value, zpal_radio_region_t *re
   return false;
 }
 
-static bool sli_try_parse_tx_power(const char *value, zpal_tx_power_t *tx_power)
-{
-  char *end_ptr;
-  long parsed_value;
-
-  errno = 0;
-  parsed_value = strtol(value, &end_ptr, 0);
-  if ((0 != errno) || ('\0' != *end_ptr)) {
-    return false;
-  }
-
-  if ((parsed_value < INT16_MIN) || (parsed_value > INT16_MAX)) {
-    return false;
-  }
-
-  *tx_power = (zpal_tx_power_t)parsed_value;
-  return true;
-}
-
 static const char *sli_get_region_name(zpal_radio_region_t region)
 {
   switch (region) {
@@ -314,8 +283,8 @@ static bool sli_validate_powerlevel(zpal_tx_power_t tx_power_level,
       && (tx_power_level <= zpal_radio_get_maximum_tx_power())
       && (tx_power_adjust >= TX_POWER_LIMIT_MIN_DDBM)
       && (tx_power_adjust <= TX_POWER_ADJUST_LIMIT_DDBM)
-  && (max_tx_power_lr >= zpal_radio_get_minimum_lr_tx_power())
-  && (max_tx_power_lr <= zpal_radio_get_maximum_lr_tx_power());
+      && (max_tx_power_lr >= DBM_TO_DDBM(zpal_radio_get_minimum_lr_tx_power()))
+      && (max_tx_power_lr <= DBM_TO_DDBM(zpal_radio_get_maximum_lr_tx_power()));
 }
 
 static void sli_log_supported_regions(void)
