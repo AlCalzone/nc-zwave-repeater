@@ -45,6 +45,7 @@
 #include "repeater_config_nvm.h"
 #include "zaf_event_distributor_soc.h"
 #include "sl_cli.h"
+#include "sl_sleeptimer.h"
 #include "app_log.h"
 #include "ev_man.h"
 #include "events.h"
@@ -63,6 +64,7 @@ typedef struct {
 
 #define TX_POWER_LIMIT_MIN_DDBM     (-100)
 #define TX_POWER_ADJUST_LIMIT_DDBM  (100)
+#define CLI_REBOOT_DELAY_MS         (50)
 
 // -----------------------------------------------------------------------------
 //                          Static Function Declarations
@@ -70,6 +72,7 @@ typedef struct {
 static bool sli_try_parse_region_name(const char *value, zpal_radio_region_t *region);
 static bool sli_try_parse_tx_power(const char *value, zpal_tx_power_t *tx_power);
 static const char *sli_get_region_name(zpal_radio_region_t region);
+static void sli_reboot_after_cli_delay(void);
 static bool sli_validate_powerlevel(zpal_tx_power_t tx_power_level,
                                     zpal_tx_power_t tx_power_adjust,
                                     zpal_tx_power_t max_tx_power_lr);
@@ -155,7 +158,7 @@ void cli_set_region(sl_cli_command_arg_t *arguments)
 
   app_log_info("Configured region set to %s in NVM. Rebooting to apply the new region.\r\n",
                sli_get_region_name(region));
-  zpal_reboot_with_info(ZAF_CONFIG_MANUFACTURER_ID, ZPAL_RESET_INFO_DEFAULT);
+  sli_reboot_after_cli_delay();
 }
 
 /******************************************************************************
@@ -238,7 +241,7 @@ void cli_set_powerlevel(sl_cli_command_arg_t *arguments)
   }
 
   app_log_info("Power configuration stored in NVM. Rebooting to apply the new settings.\r\n");
-  zpal_reboot_with_info(ZAF_CONFIG_MANUFACTURER_ID, ZPAL_RESET_INFO_DEFAULT);
+  sli_reboot_after_cli_delay();
 }
 
 // -----------------------------------------------------------------------------
@@ -295,6 +298,12 @@ static const char *sli_get_region_name(zpal_radio_region_t region)
     case REGION_KR:    return "KR";
     default:           return "Unknown";
   }
+}
+
+static void sli_reboot_after_cli_delay(void)
+{
+  sl_sleeptimer_delay_millisecond(CLI_REBOOT_DELAY_MS);
+  zpal_reboot_with_info(ZAF_CONFIG_MANUFACTURER_ID, ZPAL_RESET_INFO_DEFAULT);
 }
 
 static bool sli_validate_powerlevel(zpal_tx_power_t tx_power_level,
