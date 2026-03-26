@@ -29,6 +29,7 @@
 #endif
 #include "ZW_UserTask.h"
 #include "app_led_task.h"
+#include "repeater_config_nvm.h"
 #include "CC_ColorSwitch.h"
 #include "cc_color_switch_config_api.h"
 #include "cc_color_switch_io.h"
@@ -85,6 +86,7 @@ bool restore_color_switch_cc_state() {
 ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_t eResetReason)
 {
   SRadioConfig_t* RadioConfig;
+  zpal_radio_region_t regionMfg;
 
   zpal_enable_watchdog(true);
 
@@ -96,13 +98,24 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
 
   RadioConfig = zaf_get_radio_config();
 
-  // Read Rf region from MFG_ZWAVE_COUNTRY_FREQ
-  zpal_radio_region_t regionMfg;
-  ZW_GetMfgTokenDataCountryFreq((void*) &regionMfg);
-  if (isRfRegionValid(regionMfg)) {
-    RadioConfig->eRegion = regionMfg;
+  bool nvm_init_done = ZAF_nvm_app_init();
+
+  // Mirror how the controller firmware handles radio settings,
+  // namely using the mfg token only as a fallback.
+  if (nvm_init_done && RepeaterConfigExists()) {
+    ReadApplicationRfRegion(&RadioConfig->eRegion);
+    ReadApplicationTxPowerlevel(&RadioConfig->iTxPowerLevelMax,
+                                &RadioConfig->iTxPowerLevelAdjust);
+    ReadApplicationMaxLRTxPwr(&RadioConfig->iTxPowerLevelMaxLR);
   } else {
-    ZW_SetMfgTokenDataCountryRegion((void*) &RadioConfig->eRegion);
+    ZW_GetMfgTokenDataCountryFreq((void*) &regionMfg);
+    if (isRfRegionValid(regionMfg)) {
+      RadioConfig->eRegion = regionMfg;
+    }
+
+    if (nvm_init_done) {
+      RepeaterConfigWriteDefaults(RadioConfig);
+    }
   }
 
   /*

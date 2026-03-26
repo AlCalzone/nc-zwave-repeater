@@ -127,6 +127,8 @@ void cli_factory_reset(sl_cli_command_arg_t *arguments);
 void cli_get_dsk(sl_cli_command_arg_t *arguments);
 void cli_get_region(sl_cli_command_arg_t *arguments);
 void cli_set_region(sl_cli_command_arg_t *arguments);
+void cli_get_powerlevel(sl_cli_command_arg_t *arguments);
+void cli_set_powerlevel(sl_cli_command_arg_t *arguments);
 void cli_bootloader(sl_cli_command_arg_t *arguments);
 
 // Command structs. Names are in the format : cli_cmd_{command group name}_{command name}
@@ -152,15 +154,27 @@ static const sl_cli_command_info_t cli_cmd__get_dsk = \
 
 static const sl_cli_command_info_t cli_cmd__get_region = \
   SL_CLI_COMMAND(cli_get_region,
-                 "Get the used region",
+                 "Get the configured region",
                   "",
                  {SL_CLI_ARG_END, });
 
 static const sl_cli_command_info_t cli_cmd__set_region = \
   SL_CLI_COMMAND(cli_set_region,
-                 "Set the configured region token",
+                 "Set the configured region",
                   "<region>",
                  {SL_CLI_ARG_STRING, SL_CLI_ARG_END, });
+
+static const sl_cli_command_info_t cli_cmd__get_powerlevel = \
+  SL_CLI_COMMAND(cli_get_powerlevel,
+                 "Get the configured RF power values",
+                  "",
+                 {SL_CLI_ARG_END, });
+
+static const sl_cli_command_info_t cli_cmd__set_powerlevel = \
+  SL_CLI_COMMAND(cli_set_powerlevel,
+                 "Set the configured RF power values",
+                  "<iTxPowerLevelMax> <iTxPowerLevelAdjust> <iTxPowerLevelMaxLR>",
+                 {SL_CLI_ARG_INT16, SL_CLI_ARG_INT16, SL_CLI_ARG_INT16, SL_CLI_ARG_END, });
 
 static const sl_cli_command_info_t cli_cmd__bootloader = \
   SL_CLI_COMMAND(cli_bootloader,
@@ -179,6 +193,8 @@ const sl_cli_command_entry_t sl_cli_default_command_table[] = {
   { "get_dsk", &cli_cmd__get_dsk, false },
   { "get_region", &cli_cmd__get_region, false },
   { "set_region", &cli_cmd__set_region, false },
+  { "get_powerlevel", &cli_cmd__get_powerlevel, false },
+  { "set_powerlevel", &cli_cmd__set_powerlevel, false },
   { "bootloader", &cli_cmd__bootloader, false },
   { NULL, NULL, false },
 };

@@ -20,6 +20,7 @@ source:
 - {path: app.c}
 - {path: main.c}
 - {path: app_cli.c}
+- {path: repeater_config_nvm.c}
 tag: [prebuilt_demo]
 include:
 - path: .
