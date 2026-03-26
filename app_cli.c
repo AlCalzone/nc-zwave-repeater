@@ -62,6 +62,7 @@ typedef struct {
 
 #define TX_POWER_LIMIT_MIN_DDBM     (-100)
 #define TX_POWER_ADJUST_LIMIT_DDBM  (100)
+#define LR_TX_POWER_LIMIT_MAX_DDBM  (200)
 #define DBM_TO_DDBM(value)          ((value) * 10)
 #define CLI_REBOOT_DELAY_MS         (50)
 
@@ -209,7 +210,7 @@ void cli_set_powerlevel(sl_cli_command_arg_t *arguments)
                  TX_POWER_LIMIT_MIN_DDBM,
                  TX_POWER_ADJUST_LIMIT_DDBM,
                  (int)DBM_TO_DDBM(zpal_radio_get_minimum_lr_tx_power()),
-                 (int)DBM_TO_DDBM(zpal_radio_get_maximum_lr_tx_power()));
+                 LR_TX_POWER_LIMIT_MAX_DDBM);
     return;
   }
 
@@ -284,7 +285,7 @@ static bool sli_validate_powerlevel(zpal_tx_power_t tx_power_level,
       && (tx_power_adjust >= TX_POWER_LIMIT_MIN_DDBM)
       && (tx_power_adjust <= TX_POWER_ADJUST_LIMIT_DDBM)
       && (max_tx_power_lr >= DBM_TO_DDBM(zpal_radio_get_minimum_lr_tx_power()))
-      && (max_tx_power_lr <= DBM_TO_DDBM(zpal_radio_get_maximum_lr_tx_power()));
+      && (max_tx_power_lr <= LR_TX_POWER_LIMIT_MAX_DDBM);
 }
 
 static void sli_log_supported_regions(void)
