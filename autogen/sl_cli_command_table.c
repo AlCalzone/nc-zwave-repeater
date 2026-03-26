@@ -154,25 +154,25 @@ static const sl_cli_command_info_t cli_cmd__get_dsk = \
 
 static const sl_cli_command_info_t cli_cmd__get_region = \
   SL_CLI_COMMAND(cli_get_region,
-                 "Get the used region",
+                 "Get the configured region",
                   "",
                  {SL_CLI_ARG_END, });
 
 static const sl_cli_command_info_t cli_cmd__set_region = \
   SL_CLI_COMMAND(cli_set_region,
-                 "Set the configured region in NVM",
+                 "Set the configured region",
                   "<region>",
                  {SL_CLI_ARG_STRING, SL_CLI_ARG_END, });
 
 static const sl_cli_command_info_t cli_cmd__get_powerlevel = \
   SL_CLI_COMMAND(cli_get_powerlevel,
-                 "Get the configured RF power values from NVM",
+                 "Get the configured RF power values",
                   "",
                  {SL_CLI_ARG_END, });
 
 static const sl_cli_command_info_t cli_cmd__set_powerlevel = \
   SL_CLI_COMMAND(cli_set_powerlevel,
-                 "Set the configured RF power values in NVM",
+                 "Set the configured RF power values",
                   "<iTxPowerLevelMax> <iTxPowerLevelAdjust> <iTxPowerLevelMaxLR>",
                  {SL_CLI_ARG_INT16, SL_CLI_ARG_INT16, SL_CLI_ARG_INT16, SL_CLI_ARG_END, });
 
