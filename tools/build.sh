@@ -1,23 +1,19 @@
 #!/bin/bash
 # Required env variables:
-# SLC: Path to SLC-CLI
 # SDK: Path to SDK root
-# COMMANDER: Path to Simplicity Commander binary
-
-if [ -z "${SLC}" ]; then
-	echo "ERROR: env variable SLC must be set to SLC-CLI binary"
-	exit 1
-fi
+#
+# Optional env variables:
+# SLC: Path to SLC-CLI binary (default: slc)
+# COMMANDER: Path to Simplicity Commander binary (default: commander)
+# TOOLCHAIN: Path to the ARM toolchain root (default: found under /opt)
 
 if [ -z "${SDK}" ]; then
 	echo "ERROR: env variable SDK must be set to SDK root"
 	exit 1
 fi
 
-if [ -z "${COMMANDER}" ]; then
-	echo "ERROR: env variable COMMANDER must be set to Simplicity Commander binary"
-	exit 1
-fi
+SLC=${SLC:-slc}
+COMMANDER=${COMMANDER:-commander}
 
 POST_BUILD_EXE=tools/mkgbl.sh
 PROJ_NAME=nc_controller_soc_repeater

@@ -1,7 +1,7 @@
 name: "Build firmware"
 
 # Run this job on all pushes to master, for pull requests
-# as well as tags with a semantic version
+# as well as published releases
 on:
   push:
     branches:
@@ -19,11 +19,14 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    outputs:
+      package: ${{ steps.version.outputs.package }}
 
     steps:
       - name: Checkout repo
@@ -34,47 +37,36 @@ jobs:
         with:
           node-version: lts/*
 
+      # SLC CLI ships no JRE of its own and falls back to `java` on the PATH.
       - name: Install JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      - name: Download Simplicity SDK
+      - name: Install SLT CLI
         run: |
-          curl -o simplicity_sdk_2024.12.1.zip -L https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.12.1-0/simplicity-sdk.zip \
-          && unzip -q -d /opt/simplicity_sdk simplicity_sdk_2024.12.1.zip \
-          && rm simplicity_sdk_2024.12.1.zip
+          curl -o slt.zip https://www.silabs.com/documents/public/software/slt-cli-1.1.0-linux-x64.zip
+          unzip -q slt.zip -d /usr/local/bin
+          chmod +x /usr/local/bin/slt
 
-      - name: Download SLC CLI
+      - name: Install SDK and tools
         run: |
-          curl -O https://www.silabs.com/documents/login/software/slc_cli_linux.zip \
-          && unzip -q -d /opt slc_cli_linux.zip \
-          && rm slc_cli_linux.zip
+          slt --non-interactive install simplicity-sdk/2024.12.1
+          slt --non-interactive install slc-cli
+          slt --non-interactive install commander
+          slt --non-interactive install gcc-arm-none-eabi/12.2.rel1
 
-      # Install Simplicity Commander (unfortunately no stable URL available, this
-      # is known to be working with Commander_linux_x86_64_1v15p0b1306.tar.bz).
-      - name: Download Simplicity Commander
+      - name: Set up tool paths
         run: |
-          curl -O https://www.silabs.com/documents/login/software/SimplicityCommander-Linux.zip \
-          && unzip -q SimplicityCommander-Linux.zip \
-          && tar -C /opt -xjf SimplicityCommander-Linux/Commander_linux_x86_64_*.tar.bz \
-          && rm -r SimplicityCommander-Linux \
-          && rm SimplicityCommander-Linux.zip
-
-      # GCC Embedded Toolchain 12.2.rel1 (for Gecko SDK 4.4.0+)
-      - name: Download Toolchain
-        run: |
-          curl -O https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz \
-          && tar -C /opt -xf arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz \
-          && rm arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz
+          echo "SDK=$(slt where simplicity-sdk/2024.12.1)" >> $GITHUB_ENV
+          echo "TOOLCHAIN=$(slt where gcc-arm-none-eabi/12.2.rel1)" >> $GITHUB_ENV
+          echo "SLC_CLI=$(slt where slc-cli)" >> $GITHUB_ENV
+          echo "$(slt where slc-cli)" >> $GITHUB_PATH
+          echo "$(slt where commander)" >> $GITHUB_PATH
 
       - name: Build project
         run: tools/build.sh
-        env:
-          SDK: /opt/simplicity_sdk
-          SLC: /opt/slc_cli/slc
-          COMMANDER: /opt/commander/commander
 
       - name: Check build output
         run: |
@@ -92,6 +84,7 @@ jobs:
           fi
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "SUFFIX=${SUFFIX}" >> $GITHUB_ENV
+          echo "package=zwa2_repeater_${SUFFIX}" >> $GITHUB_OUTPUT
 
       - name: Copy build artifacts
         run: |
@@ -162,15 +155,31 @@ jobs:
           name: zwa2_repeater_${{ env.SUFFIX }}
           path: upload/*.*
 
-      - name: Upload to release
-        if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v2
-        with:
-          files: upload/*.*
-
       - name: Debug Build failures
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: slc_cli_log
-          path: /opt/slc_cli/bin/slc-cli/configuration/*.log
+          path: ${{ env.SLC_CLI }}/bin/slc-cli/configuration/*.log
+
+  # Separate job so the build job, which runs code from pull requests, keeps a
+  # read-only token.
+  release:
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download firmware package
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.package }}
+          path: upload
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          files: upload/*.*
