@@ -21,12 +21,14 @@ source:
 - {path: main.c}
 - {path: app_cli.c}
 - {path: repeater_config_nvm.c}
+- {path: zwave_identity.c}
 tag: [prebuilt_demo]
 include:
 - path: .
   file_list:
   - {path: events.h}
   - {path: app_rgb_led.h}
+  - {path: zwave_identity.h}
 sdk: {id: simplicity_sdk, version: 2024.12.1}
 toolchain_settings: []
 component:

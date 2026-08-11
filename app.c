@@ -34,6 +34,7 @@
 #include "cc_color_switch_config_api.h"
 #include "cc_color_switch_io.h"
 #include "board_indicator_control.h"
+#include "zwave_identity.h"
 
 #ifdef SL_CATALOG_ZW_CLI_COMMON_PRESENT
 #include "zw_cli_common.h"
@@ -116,6 +117,10 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
     if (nvm_init_done) {
       RepeaterConfigWriteDefaults(RadioConfig);
     }
+  }
+
+  if (!zwave_identity_reconcile(ZAF_isLongRangeRegion(RadioConfig->eRegion))) {
+    return APPLICATION_POWER_DOWN;
   }
 
   /*
