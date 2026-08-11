@@ -1,6 +1,9 @@
 #!/bin/bash
-# Required env variables:
-# COMMANDER: Path to Simplicity Commander binary
+# Optional env variables:
+# COMMANDER: Path to Simplicity Commander binary (default: commander)
+
+# make invokes this as a post-build step, so it defaults COMMANDER of its own
+COMMANDER=${COMMANDER:-commander}
 
 BUILD_OUTPUT=build/release/nc_controller_soc_repeater.hex
 OUTFILE=artifact/zwa2_repeater.gbl
