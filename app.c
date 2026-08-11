@@ -45,7 +45,6 @@
 #endif
 
 static void ApplicationTask(SApplicationHandles* pAppHandles);
-static void ApplicationPowerDownTask(SApplicationHandles* pAppHandles);
 
 #define LED_TASK_STACK_SIZE           200  // [bytes]
 static TaskHandle_t m_xTaskHandleLED   = NULL;
@@ -122,13 +121,7 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
 
   // Repair/Reconcile the S2 identity before the protocol validates it.
   if (!zwave_identity_reconcile(ZAF_isLongRangeRegion(RadioConfig->eRegion))) {
-    __attribute__((unused)) bool bWasTaskCreated = ZW_ApplicationRegisterTask(
-      ApplicationPowerDownTask,
-      EAPPLICATIONEVENT_ZWRX,
-      EAPPLICATIONEVENT_ZWCOMMANDSTATUS,
-      zaf_get_protocol_config()
-      );
-    assert(bWasTaskCreated);
+    bootloader_rebootAndInstall();
     return APPLICATION_POWER_DOWN;
   }
 
@@ -171,14 +164,6 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
   ZW_UserTask_CreateTask(&task, &m_xTaskHandleLED);
 
   return (APPLICATION_RUNNING);
-}
-
-static void ApplicationPowerDownTask(
-  __attribute__((unused)) SApplicationHandles* pAppHandles)
-{
-  for (;;) {
-    vTaskSuspend(NULL);
-  }
 }
 
 /**
