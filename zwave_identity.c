@@ -8,6 +8,9 @@
 #include "psa/crypto.h"
 #include "zpal_misc.h"
 
+// Controller and repeater firmware persist the S2 identity in different stores.
+// Reconcile the PSA key and QR token after a firmware switch so S2 inclusion can send the DSK.
+// The protocol uses this fixed PSA key ID for its static S2 identity.
 #define ZWAVE_ECC_KEY_ID ((psa_key_id_t)0x70000)
 
 extern void compose_qr_code(bool region_lr,
@@ -58,6 +61,7 @@ static bool validate_token_keypair(
   const uint8_t private_key[TOKEN_MFG_ZW_PRK_SIZE],
   const uint8_t public_key[TOKEN_MFG_ZW_PUK_SIZE])
 {
+  // Validate the token pair before replacing persistent identity storage.
   psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
   mbedtls_svc_key_id_t temporary_key = MBEDTLS_SVC_KEY_ID_INIT;
 
@@ -115,6 +119,7 @@ static bool reconcile_qr_code(
   uint8_t stored[TOKEN_MFG_ZW_QR_CODE_SIZE];
   ZW_GetMfgTokenData(stored, TOKEN_MFG_ZW_QR_CODE_ID, sizeof(stored));
 
+  // Static token writes are write-once, so repair only a fully erased QR token.
   if (!all_ff(stored, sizeof(stored))) {
     return true;
   }
@@ -135,6 +140,7 @@ bool zwave_identity_reconcile(bool region_lr)
                      TOKEN_MFG_ZW_INITIALIZED_ID,
                      sizeof(initialized));
 
+  // The protocol owns normal first-boot generation while this token is erased.
   if (initialized == 0xff) {
     return true;
   }

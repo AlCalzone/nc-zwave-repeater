@@ -119,6 +119,7 @@ ZW_APPLICATION_STATUS ApplicationInit(__attribute__((unused)) zpal_reset_reason_
     }
   }
 
+  // Reconcile before the protocol validates its persistent S2 identity.
   if (!zwave_identity_reconcile(ZAF_isLongRangeRegion(RadioConfig->eRegion))) {
     return APPLICATION_POWER_DOWN;
   }
